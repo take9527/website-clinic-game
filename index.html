@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Clinic: Cure the Dark Patterns</title>
+  <style>
+    :root {
+      --clinic-blue: #3a86ff;
+      --blue-dark: #1559bf;
+      --symptom-red: #ef3e4a;
+      --cure-green: #4caf7d;
+      --soft-white: #f7f8fa;
+      --ink: #1e2a36;
+      --muted: #7a8794;
+      --line: #dce3eb;
+      --amber: #ffb020;
+      --panel: #ffffff;
+      --shadow: 0 18px 50px rgba(30, 42, 54, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--soft-white);
+      letter-spacing: 0;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .intro {
+      padding: 32px 18px;
+      background:
+        linear-gradient(180deg, rgba(58, 134, 255, 0.08), rgba(76, 175, 125, 0.08)),
+        var(--soft-white);
+    }
+
+    .intro-shell {
+      width: min(460px, 100%);
+      margin: 0 auto;
+    }
+
+    .intro-title {
+      margin: 0 0 18px;
+      text-align: center;
+    }
+
+    .intro-title h1 {
+      margin: 0 0 6px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.02;
+    }
+
+    .intro-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .phone {
+      min-height: 660px;
+      border: 10px solid #172433;
+      border-radius: 34px;
+      background: #fdfefe;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .phone-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .avatar-line {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .avatar {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--clinic-blue);
+      font-weight: 800;
+    }
+
+    .contact {
+      min-width: 0;
+    }
+
+    .contact strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .contact span {
+      color: var(--cure-green);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 520px;
+      padding: 18px;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      line-height: 1.35;
+      animation: bubbleIn 260ms ease both;
+    }
+
+    .bubble.client {
+      align-self: flex-start;
+      border-bottom-left-radius: 6px;
+      background: #eef3f8;
+    }
+
+    .bubble.doctor {
+      align-self: flex-end;
+      border-bottom-right-radius: 6px;
+      color: #fff;
+      background: var(--clinic-blue);
+    }
+
+    .phone-actions {
+      display: flex;
+      gap: 10px;
+      padding: 0 18px 18px;
+    }
+
+    .primary,
+    .secondary,
+    .ghost {
+      min-height: 44px;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-weight: 800;
+    }
+
+    .primary {
+      color: #fff;
+      background: var(--clinic-blue);
+    }
+
+    .primary:hover {
+      background: var(--blue-dark);
+    }
+
+    .secondary {
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .ghost {
+      color: var(--clinic-blue);
+      background: transparent;
+    }
+
+    .game-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .topbar,
+    .bottombar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .bottombar {
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.28rem;
+      line-height: 1.1;
+    }
+
+    .brand p,
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 12px;
+      background: #fff;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .meter {
+      width: 120px;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8edf3;
+    }
+
+    .meter span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--cure-green);
+      transition: width 240ms ease;
+    }
+
+    .clinic-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.55fr);
+      gap: 20px;
+      padding: 22px;
+      min-height: 0;
+    }
+
+    .booking-page,
+    .doctor-panel,
+    .report-shell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .booking-page {
+      overflow: hidden;
+    }
+
+    .airline-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #154c91, #3a86ff);
+    }
+
+    .airline-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.18);
+      font-weight: 900;
+    }
+
+    .airline-header h2,
+    .airline-header p {
+      margin: 0;
+    }
+
+    .airline-header p {
+      opacity: 0.88;
+      font-size: 0.92rem;
+    }
+
+    .urgency {
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 8px;
+      text-align: right;
+      background: rgba(239, 62, 74, 0.22);
+    }
+
+    .urgency strong {
+      font-size: 0.9rem;
+    }
+
+    .urgency span {
+      font-variant-numeric: tabular-nums;
+      font-weight: 900;
+    }
+
+    .booking-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 18px;
+      padding: 18px;
+      background: #f9fbfd;
+    }
+
+    .modules {
+      display: grid;
+      gap: 14px;
+    }
+
+    .module,
+    .summary-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .module h3,
+    .summary-box h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .module p,
+    .summary-box p {
+      margin: 6px 0;
+    }
+
+    .flight-row,
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid #edf1f5;
+      padding: 7px 0;
+    }
+
+    .flight-row:last-child,
+    .price-row:last-child {
+      border-bottom: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #9aa6b2;
+      font-size: 0.8rem;
+      text-decoration: underline;
+    }
+
+    .shame-copy {
+      display: inline-block;
+      margin-top: 10px;
+      color: #687586;
+      font-size: 0.9rem;
+      text-decoration: underline;
+    }
+
+    .upsell-main {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 8px;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--symptom-red);
+      font-weight: 900;
+    }
+
+    .skip-tiny {
+      display: block;
+      width: max-content;
+      margin: 8px auto 0;
+      color: #a7b0bb;
+      font-size: 0.78rem;
+      text-decoration: none;
+    }
+
+    .fee-box {
+      margin-top: 10px;
+      border: 1px dashed rgba(239, 62, 74, 0.55);
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(239, 62, 74, 0.06);
+    }
+
+    .final-total {
+      color: var(--symptom-red);
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .confirm {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 14px;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--clinic-blue);
+      font-weight: 900;
+    }
+
+    .hotspot {
+      position: relative;
+      outline: 0 solid transparent;
+      transition: box-shadow 160ms ease, outline-color 160ms ease, background 160ms ease;
+    }
+
+    .hotspot:hover {
+      outline: 2px solid rgba(239, 62, 74, 0.34);
+      box-shadow: 0 0 0 5px rgba(239, 62, 74, 0.08);
+    }
+
+    .hotspot.selected {
+      outline: 2px solid var(--amber);
+      box-shadow: 0 0 0 5px rgba(255, 176, 32, 0.18);
+    }
+
+    .hotspot.cured {
+      outline: 2px solid var(--cure-green);
+      box-shadow: 0 0 0 5px rgba(76, 175, 125, 0.13);
+    }
+
+    .hotspot.cured::after {
+      content: "Cured";
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: #fff;
+      background: var(--cure-green);
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .doctor-panel {
+      align-self: start;
+      position: sticky;
+      top: 90px;
+      padding: 18px;
+      min-height: 520px;
+    }
+
+    .panel-empty {
+      display: grid;
+      place-items: center;
+      min-height: 480px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .scope {
+      display: grid;
+      width: 96px;
+      height: 96px;
+      place-items: center;
+      margin: 0 auto 16px;
+      border: 2px solid #cfe0f5;
+      border-radius: 50%;
+      color: var(--clinic-blue);
+      background: #f1f7ff;
+      font-size: 2.4rem;
+    }
+
+    .diagnosis-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.24rem;
+    }
+
+    .diagnosis-card > p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .question {
+      margin-top: 16px;
+    }
+
+    .question strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .option {
+      display: flex;
+      width: 100%;
+      min-height: 42px;
+      align-items: center;
+      margin-bottom: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #fff;
+      text-align: left;
+      line-height: 1.25;
+    }
+
+    .option:hover,
+    .option.active {
+      border-color: var(--clinic-blue);
+      background: #f1f7ff;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      border-radius: 8px;
+      padding: 12px;
+      line-height: 1.42;
+    }
+
+    .feedback.correct {
+      border: 1px solid rgba(76, 175, 125, 0.45);
+      background: rgba(76, 175, 125, 0.1);
+    }
+
+    .feedback.warn {
+      border: 1px solid rgba(255, 176, 32, 0.45);
+      background: rgba(255, 176, 32, 0.12);
+    }
+
+    .feedback.bad {
+      border: 1px solid rgba(239, 62, 74, 0.35);
+      background: rgba(239, 62, 74, 0.1);
+    }
+
+    .feedback h3 {
+      margin: 0 0 6px;
+    }
+
+    .feedback p {
+      margin: 6px 0;
+    }
+
+    .panel-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .cured-version {
+      border-color: rgba(76, 175, 125, 0.38);
+      background: #f3fbf7;
+    }
+
+    .choice-row {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .choice-row label,
+    .choice-button {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #bfd8ca;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .balanced-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .balanced-buttons button {
+      min-height: 44px;
+      border: 1px solid #bfd8ca;
+      border-radius: 8px;
+      background: #fff;
+      font-weight: 800;
+    }
+
+    .balanced-buttons button:first-child {
+      color: #fff;
+      border-color: var(--cure-green);
+      background: var(--cure-green);
+    }
+
+    .result {
+      padding: 28px 18px;
+    }
+
+    .report-shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .report-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .report-hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1;
+    }
+
+    .report-hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.45;
+    }
+
+    .score-badge {
+      min-width: 150px;
+      border-radius: 8px;
+      padding: 16px;
+      color: #fff;
+      background: var(--clinic-blue);
+      text-align: center;
+    }
+
+    .score-badge strong {
+      display: block;
+      font-size: 2rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.7rem;
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .report-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .report-card h3 {
+      margin: 0 0 8px;
+    }
+
+    .report-card p {
+      margin: 6px 0;
+      line-height: 1.42;
+    }
+
+    .principles {
+      margin-top: 18px;
+      border: 1px solid rgba(58, 134, 255, 0.25);
+      border-radius: 8px;
+      padding: 16px;
+      background: #f2f8ff;
+    }
+
+    .principles h2 {
+      margin: 0 0 10px;
+    }
+
+    .principles ul {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .principles li {
+      border: 1px solid #cfe0f5;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      line-height: 1.35;
+    }
+
+    @keyframes bubbleIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .clinic-layout,
+      .booking-body {
+        grid-template-columns: 1fr;
+      }
+
+      .doctor-panel {
+        position: static;
+        min-height: 360px;
+      }
+
+      .report-grid,
+      .metrics,
+      .principles ul {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .status {
+        justify-content: flex-start;
+      }
+
+      .clinic-layout {
+        padding: 12px;
+      }
+
+      .airline-header,
+      .report-hero {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .urgency {
+        text-align: left;
+      }
+
+      .balanced-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        min-height: 620px;
+        border-width: 7px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="introScreen" class="screen intro active">
+    <section class="intro-shell">
+      <div class="intro-title">
+        <h1>Website Clinic</h1>
+        <p>Diagnose dark patterns. Cure the interface. Restore user trust.</p>
+      </div>
+      <div class="phone" id="phone">
+        <div class="phone-top">
+          <div class="avatar-line">
+            <div class="avatar">C</div>
+            <div class="contact">
+              <strong>Client Message</strong>
+              <span>Incoming case</span>
+            </div>
+          </div>
+          <strong>Clinic</strong>
+        </div>
+        <div class="chat" id="chat"></div>
+        <div class="phone-actions">
+          <button class="primary" id="continueBtn">Continue</button>
+          <button class="secondary" id="acceptBtn" hidden>Accept Case</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="gameScreen" class="screen game-screen">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Website Clinic</h1>
+        <p>Diagnose the booking page</p>
+      </div>
+      <div class="status">
+        <div class="pill"><span id="progressText">0 / 5</span> Dark Patterns found</div>
+        <div class="pill">Trust <div class="meter"><span id="trustFill"></span></div><span id="trustText">100%</span></div>
+      </div>
+    </header>
+
+    <section class="clinic-layout">
+      <article class="booking-page" aria-label="Simulated booking website">
+        <div class="airline-header">
+          <div class="airline-logo">
+            <div class="logo-mark">FF</div>
+            <div>
+              <h2>FlyFast Airlines</h2>
+              <p>Complete Your Booking</p>
+            </div>
+          </div>
+          <div class="urgency hotspot" data-pattern="urgency" role="button" tabindex="0">
+            <strong>Only 2 seats left at this price!</strong>
+            <span id="timer">Offer expires in 04:59</span>
+          </div>
+        </div>
+        <div class="booking-body">
+          <div class="modules">
+            <section class="module">
+              <h3>Flight Summary</h3>
+              <div class="flight-row"><span>Route</span><strong>London to Lisbon</strong></div>
+              <div class="flight-row"><span>Date</span><strong>18 July</strong></div>
+              <div class="flight-row"><span>Base fare</span><strong>€49.99</strong></div>
+            </section>
+
+            <section class="module hotspot" data-pattern="seat" role="button" tabindex="0" id="module-seat">
+              <h3>Seat Selection</h3>
+              <p>Choose your seat now and sit with your travel partner.</p>
+              <button class="secondary">Select my seat</button>
+              <a class="shame-copy">No thanks, I don’t care where I sit</a>
+            </section>
+
+            <section class="module hotspot" data-pattern="insurance" role="button" tabindex="0" id="module-insurance">
+              <h3>Travel Insurance</h3>
+              <p>Protect your trip for only €18.99.</p>
+              <label><input type="checkbox" checked> Yes, add travel insurance to my booking</label>
+              <a class="small-link">No thanks, I will take the risk</a>
+            </section>
+
+            <section class="module hotspot" data-pattern="baggage" role="button" tabindex="0" id="module-baggage">
+              <h3>Extra Baggage</h3>
+              <p>Add priority boarding and cabin bag?</p>
+              <button class="upsell-main">Yes, upgrade my trip</button>
+              <a class="skip-tiny">skip for now</a>
+            </section>
+          </div>
+
+          <aside class="summary-box">
+            <h3>Final Payment</h3>
+            <div class="price-row"><span>Displayed total</span><strong>€49.99</strong></div>
+            <div class="fee-box hotspot" data-pattern="costs" role="button" tabindex="0">
+              <div class="price-row"><span>Service Fee</span><strong>€12.50</strong></div>
+              <div class="price-row"><span>Payment Processing Fee</span><strong>€5.00</strong></div>
+              <p class="final-total">Final Total: €67.49</p>
+            </div>
+            <button class="confirm">Confirm Booking</button>
+          </aside>
+        </div>
+      </article>
+
+      <aside class="doctor-panel" id="doctorPanel" aria-live="polite">
+        <div class="panel-empty">
+          <div>
+            <div class="scope">+</div>
+            <h2>Scan the interface</h2>
+            <p>Click suspicious interface elements to diagnose possible dark patterns.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="bottombar">
+      <p class="hint" id="hintText">Tip: suspicious elements often make one choice easier, faster, or more emotional than the other.</p>
+      <button class="primary" id="finishBtn">Finish Diagnosis</button>
+    </footer>
+  </main>
+
+  <main id="resultScreen" class="screen result">
+    <section class="report-shell">
+      <div class="report-hero">
+        <div>
+          <h1>Diagnosis Complete</h1>
+          <p>You replaced manipulation with clarity, consent, and user control.</p>
+        </div>
+        <div class="score-badge">
+          <span>Score</span>
+          <strong id="scoreText">0</strong>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span>Found</span><strong id="foundMetric">0 / 5</strong></div>
+        <div class="metric"><span>Cured</span><strong id="curedMetric">0 / 5</strong></div>
+        <div class="metric"><span>Final Trust</span><strong id="trustMetric">100%</strong></div>
+      </div>
+      <div class="report-grid" id="reportGrid"></div>
+      <section class="principles">
+        <h2>Ethical Design Principles</h2>
+        <ul>
+          <li><strong>Transparency</strong><br>Show costs, consequences, and choices clearly.</li>
+          <li><strong>User Control</strong><br>Let users actively choose instead of relying on manipulative defaults.</li>
+          <li><strong>Neutral Language</strong><br>Avoid guilt, shame, fear, or pressure in interface copy.</li>
+          <li><strong>Balanced Choices</strong><br>Make accept and decline options equally visible and accessible.</li>
+          <li><strong>Honest Urgency</strong><br>Use urgency only when it is accurate, verifiable, and relevant.</li>
+        </ul>
+      </section>
+      <div class="panel-actions">
+        <button class="primary" id="restartBtn">Start New Case</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const messages = [
+      { from: "client", text: "Hi Doctor, I need your help." },
+      { from: "client", text: "Our travel booking website is making users angry. They say it feels confusing, pushy, and impossible to leave." },
+      { from: "doctor", text: "Sounds like a possible Dark Pattern infection." },
+      { from: "client", text: "Dark Pattern?" },
+      { from: "doctor", text: "A design trick that manipulates users into doing things they may not actually want to do." },
+      { from: "client", text: "Can you diagnose it?" },
+      { from: "doctor", text: "Yes. I’ll inspect the interface, identify the symptoms, and prescribe ethical design fixes." },
+      { from: "client", text: "Please cure our website before more users lose trust." }
+    ];
+
+    const patterns = {
+      insurance: {
+        title: "Travel Insurance",
+        type: "Preselection / Default Bias",
+        symptom: "The paid travel insurance option is selected by default, while refusal is hidden in weak copy.",
+        original: "Yes, add travel insurance to my booking",
+        cure: "Do not pre-select optional paid services. Present both choices equally and let users actively opt in.",
+        curedHtml: `
+          <h3>Travel Insurance</h3>
+          <p>Would you like to add travel insurance?</p>
+          <div class="choice-row">
+            <label><input type="checkbox"> Yes, add insurance for €18.99</label>
+            <label><input type="checkbox"> No, continue without insurance</label>
+          </div>
+        `,
+        explanation: "Optional paid services should require active consent instead of being selected by default.",
+        typeOptions: ["Preselection / Default Bias", "Scarcity", "Forced Continuity", "Hidden Costs"],
+        cureOptions: [
+          "Do not pre-select optional paid services. Present both choices equally and let users actively opt in.",
+          "Hide the refusal link until the user scrolls.",
+          "Make the insurance checkbox larger and brighter."
+        ],
+        lesson: "Consent should be active, informed, and easy to refuse."
+      },
+      seat: {
+        title: "Seat Selection",
+        type: "Confirmshaming",
+        symptom: "The refusal copy shames the user for declining a paid or optional choice.",
+        original: "No thanks, I don’t care where I sit",
+        cure: "Use neutral language for refusal options. Do not shame users for declining an offer.",
+        curedHtml: `
+          <h3>Seat Selection</h3>
+          <p>Would you like to choose your seat?</p>
+          <div class="balanced-buttons">
+            <button>Choose seat</button>
+            <button>Skip seat selection</button>
+          </div>
+        `,
+        explanation: "Refusal should be neutral. Ethical design respects the user's choice without guilt or pressure.",
+        typeOptions: ["Confirmshaming", "Roach Motel", "Misdirection", "Nagging"],
+        cureOptions: [
+          "Use neutral language for refusal options. Do not shame users for declining an offer.",
+          "Warn the user that bad seats may ruin the trip.",
+          "Remove the skip option entirely."
+        ],
+        lesson: "Neutral language protects user dignity and autonomy."
+      },
+      costs: {
+        title: "Final Payment",
+        type: "Hidden Costs",
+        symptom: "Mandatory fees appear late, after the user has already invested time in the booking flow.",
+        original: "Service Fee: €12.50 and Payment Processing Fee: €5.00 appear at the end.",
+        cure: "Show all mandatory fees early and clearly before users invest time in the checkout process.",
+        curedHtml: `
+          <div class="price-row"><span>Flight price</span><strong>€49.99</strong></div>
+          <div class="price-row"><span>Service fee</span><strong>€12.50</strong></div>
+          <div class="price-row"><span>Payment fee</span><strong>€5.00</strong></div>
+          <p class="final-total" style="color: var(--cure-green)">Total today: €67.49</p>
+        `,
+        explanation: "Users need full pricing information before they commit time and attention.",
+        typeOptions: ["Hidden Costs", "Scarcity", "Preselection", "Social Proof"],
+        cureOptions: [
+          "Show all mandatory fees early and clearly before users invest time in the checkout process.",
+          "Show fees only after the card number is entered.",
+          "Rename service fees as travel support."
+        ],
+        lesson: "Transparent pricing prevents surprise and builds trust."
+      },
+      baggage: {
+        title: "Extra Baggage",
+        type: "Misdirection / Visual Hierarchy Manipulation",
+        symptom: "The upgrade button is visually dominant, while the skip option is tiny and pale.",
+        original: "Yes, upgrade my trip is bold and red; skip for now is small and faint.",
+        cure: "Make accept and decline options visually balanced, clear, and equally accessible.",
+        curedHtml: `
+          <h3>Extra Baggage</h3>
+          <p>Would you like to add priority boarding and cabin bag?</p>
+          <div class="balanced-buttons">
+            <button>Add upgrade</button>
+            <button>Continue without upgrade</button>
+          </div>
+        `,
+        explanation: "Visual hierarchy should clarify choices, not steer users away from declining.",
+        typeOptions: ["Misdirection / Visual Hierarchy Manipulation", "Forced Action", "Sneaking", "Scarcity"],
+        cureOptions: [
+          "Make accept and decline options visually balanced, clear, and equally accessible.",
+          "Make the upgrade button flash until clicked.",
+          "Move the skip option below the payment button."
+        ],
+        lesson: "Balanced choices make both paths equally reachable."
+      },
+      urgency: {
+        title: "Urgency Banner",
+        type: "False Urgency / Scarcity Pressure",
+        symptom: "A countdown and low-seat warning create pressure without verifiable inventory.",
+        original: "Only 2 seats left at this price! Offer expires in 04:59.",
+        cure: "Only show urgency messages when they are accurate, verifiable, and relevant to the user’s decision.",
+        curedHtml: `
+          <strong>Current fare: €49.99</strong>
+          <span>Prices may change depending on availability.</span>
+        `,
+        explanation: "Urgency should inform the user, not manufacture panic.",
+        typeOptions: ["False Urgency / Scarcity Pressure", "Hidden Subscription", "Obstruction", "Confirmshaming"],
+        cureOptions: [
+          "Only show urgency messages when they are accurate, verifiable, and relevant to the user’s decision.",
+          "Restart the countdown whenever it reaches zero.",
+          "Make the countdown larger and add warning sounds."
+        ],
+        lesson: "Honest urgency avoids fake countdowns and pressure tactics."
+      }
+    };
+
+    const state = {
+      messageIndex: 0,
+      currentPattern: null,
+      selectedType: "",
+      selectedCure: "",
+      trust: 100,
+      score: 0,
+      attempts: {},
+      pendingAwarded: {},
+      cured: {}
+    };
+
+    const chat = document.getElementById("chat");
+    const continueBtn = document.getElementById("continueBtn");
+    const acceptBtn = document.getElementById("acceptBtn");
+    const doctorPanel = document.getElementById("doctorPanel");
+    const progressText = document.getElementById("progressText");
+    const trustText = document.getElementById("trustText");
+    const trustFill = document.getElementById("trustFill");
+    const hintText = document.getElementById("hintText");
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function addNextMessage() {
+      if (state.messageIndex >= messages.length) return;
+      const message = messages[state.messageIndex];
+      const bubble = document.createElement("div");
+      bubble.className = `bubble ${message.from}`;
+      bubble.textContent = message.text;
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+      state.messageIndex += 1;
+
+      if (state.messageIndex === messages.length) {
+        continueBtn.hidden = true;
+        acceptBtn.hidden = false;
+      }
+    }
+
+    function updateStatus() {
+      const curedCount = Object.keys(state.cured).length;
+      progressText.textContent = `${curedCount} / ${Object.keys(patterns).length}`;
+      trustText.textContent = `${state.trust}%`;
+      trustFill.style.width = `${state.trust}%`;
+    }
+
+    function openDiagnosis(id) {
+      if (state.cured[id]) {
+        hintText.textContent = "This area is already cured. Keep scanning for untreated symptoms.";
+        return;
+      }
+
+      state.currentPattern = id;
+      state.selectedType = "";
+      state.selectedCure = "";
+      state.attempts[id] = state.attempts[id] || 0;
+
+      document.querySelectorAll(".hotspot").forEach(node => node.classList.remove("selected"));
+      document.querySelectorAll(`[data-pattern="${id}"]`).forEach(node => node.classList.add("selected"));
+
+      const pattern = patterns[id];
+      doctorPanel.innerHTML = `
+        <div class="diagnosis-card">
+          <h2>Symptom Detected</h2>
+          <p>${pattern.symptom}</p>
+          <div class="question">
+            <strong>What type of Dark Pattern is this?</strong>
+            <div id="typeOptions">${renderOptions(pattern.typeOptions, "type")}</div>
+          </div>
+          <div class="question">
+            <strong>How should we cure it?</strong>
+            <div id="cureOptions">${renderOptions(pattern.cureOptions, "cure")}</div>
+          </div>
+          <div class="panel-actions">
+            <button class="primary" id="submitDiagnosis">Submit Diagnosis</button>
+          </div>
+          <div id="feedbackSlot"></div>
+        </div>
+      `;
+      doctorPanel.querySelectorAll("[data-choice]").forEach(button => {
+        button.addEventListener("click", () => chooseOption(button));
+      });
+      document.getElementById("submitDiagnosis").addEventListener("click", submitDiagnosis);
+      hintText.textContent = "Choose both the diagnosis and the ethical cure, then submit.";
+    }
+
+    function renderOptions(options, kind) {
+      return options.map(option => `<button class="option" data-choice="${kind}" data-value="${escapeAttribute(option)}">${option}</button>`).join("");
+    }
+
+    function escapeAttribute(value) {
+      return value.replace(/"/g, "&quot;");
+    }
+
+    function chooseOption(button) {
+      const kind = button.dataset.choice;
+      const value = button.dataset.value;
+      state[kind === "type" ? "selectedType" : "selectedCure"] = value;
+      button.parentElement.querySelectorAll(".option").forEach(option => option.classList.remove("active"));
+      button.classList.add("active");
+    }
+
+    function submitDiagnosis() {
+      const id = state.currentPattern;
+      const pattern = patterns[id];
+      const feedbackSlot = document.getElementById("feedbackSlot");
+
+      if (!state.selectedType || !state.selectedCure) {
+        feedbackSlot.innerHTML = `<div class="feedback warn"><h3>Missing evidence</h3><p>Please choose one diagnosis and one cure before submitting.</p></div>`;
+        return;
+      }
+
+      state.attempts[id] += 1;
+      const typeCorrect = state.selectedType === pattern.type;
+      const cureCorrect = state.selectedCure === pattern.cure;
+
+      if (typeCorrect && cureCorrect) {
+        const firstTry = state.attempts[id] === 1;
+        if (!state.cured[id] && !state.pendingAwarded[id]) {
+          state.score += 30 + (firstTry ? 5 : 0);
+          state.trust = Math.min(100, state.trust + 3);
+          state.pendingAwarded[id] = true;
+        }
+        document.getElementById("submitDiagnosis").disabled = true;
+        feedbackSlot.innerHTML = `
+          <div class="feedback correct">
+            <h3>Diagnosis Correct!</h3>
+            <p><strong>You found:</strong> ${pattern.type}</p>
+            <p><strong>Why it is harmful:</strong> ${pattern.explanation}</p>
+            <p><strong>Ethical cure:</strong> ${pattern.cure}</p>
+          </div>
+          <div class="panel-actions">
+            <button class="primary" id="applyCure">Apply Cure</button>
+          </div>
+        `;
+        document.getElementById("applyCure").addEventListener("click", applyCure);
+      } else if (typeCorrect) {
+        state.score = Math.max(0, state.score - 2);
+        state.trust = Math.max(0, state.trust - 4);
+        feedbackSlot.innerHTML = `
+          <div class="feedback warn">
+            <h3>Almost there.</h3>
+            <p>You identified the symptom correctly, but the treatment does not fully solve the problem.</p>
+            <p>Try choosing a fix that gives users clear, neutral, and equal choices.</p>
+          </div>
+        `;
+      } else {
+        state.score = Math.max(0, state.score - 2);
+        state.trust = Math.max(0, state.trust - 5);
+        feedbackSlot.innerHTML = `
+          <div class="feedback bad">
+            <h3>Not quite.</h3>
+            <p>Look at how this interface influences the user’s decision.</p>
+            <p>Is it hiding information, creating pressure, or making one option harder to choose?</p>
+          </div>
+        `;
+      }
+      updateStatus();
+    }
+
+    function applyCure() {
+      const id = state.currentPattern;
+      const pattern = patterns[id];
+      const nodes = document.querySelectorAll(`[data-pattern="${id}"]`);
+      nodes.forEach(node => {
+        node.innerHTML = pattern.curedHtml;
+        node.classList.add("cured", "cured-version");
+        node.classList.remove("selected");
+        node.setAttribute("aria-label", `${pattern.title} cured`);
+      });
+
+      state.cured[id] = true;
+      state.currentPattern = null;
+      doctorPanel.innerHTML = `
+        <div class="panel-empty">
+          <div>
+            <div class="scope">✓</div>
+            <h2>Cure applied</h2>
+            <p>${pattern.lesson}</p>
+          </div>
+        </div>
+      `;
+      updateStatus();
+      const curedCount = Object.keys(state.cured).length;
+      hintText.textContent = curedCount === Object.keys(patterns).length
+        ? "All symptoms cured. Finish the diagnosis to review your report."
+        : "Good treatment. Keep scanning the booking page for the next symptom.";
+    }
+
+    function finishGame() {
+      const total = Object.keys(patterns).length;
+      const curedCount = Object.keys(state.cured).length;
+      document.getElementById("scoreText").textContent = state.score;
+      document.getElementById("foundMetric").textContent = `${curedCount} / ${total}`;
+      document.getElementById("curedMetric").textContent = `${curedCount} / ${total}`;
+      document.getElementById("trustMetric").textContent = `${state.trust}%`;
+      document.getElementById("reportGrid").innerHTML = Object.entries(patterns).map(([id, pattern]) => {
+        const cured = state.cured[id];
+        return `
+          <article class="report-card">
+            <h3>${cured ? "Cured" : "Unresolved"}: ${pattern.title}</h3>
+            <p><strong>Dark Pattern Found:</strong> ${pattern.type}</p>
+            <p><strong>Original Symptom:</strong> ${pattern.original}</p>
+            <p><strong>Ethical Cure:</strong> ${pattern.cure}</p>
+            <p><strong>Design Lesson:</strong> ${pattern.lesson}</p>
+          </article>
+        `;
+      }).join("");
+      showScreen("resultScreen");
+    }
+
+    function resetGame() {
+      window.location.reload();
+    }
+
+    continueBtn.addEventListener("click", addNextMessage);
+    acceptBtn.addEventListener("click", () => showScreen("gameScreen"));
+    document.getElementById("phone").addEventListener("click", event => {
+      if (event.target.closest("button")) return;
+      if (!continueBtn.hidden) addNextMessage();
+    });
+    document.querySelectorAll(".hotspot").forEach(node => {
+      node.addEventListener("click", () => openDiagnosis(node.dataset.pattern));
+      node.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openDiagnosis(node.dataset.pattern);
+        }
+      });
+    });
+    document.getElementById("finishBtn").addEventListener("click", finishGame);
+    document.getElementById("restartBtn").addEventListener("click", resetGame);
+
+    let seconds = 299;
+    setInterval(() => {
+      seconds -= 1;
+      if (seconds < 0) seconds = 299;
+      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const sec = String(seconds % 60).padStart(2, "0");
+      const timer = document.getElementById("timer");
+      if (timer) timer.textContent = `Offer expires in ${min}:${sec}`;
+    }, 1000);
+
+    addNextMessage();
+    updateStatus();
+  </script>
+</body>
+</html>
