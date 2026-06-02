@@ -560,6 +560,61 @@
       background: #f1f7ff;
     }
 
+    .tool-option {
+      position: relative;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tool-icon {
+      display: grid;
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--clinic-blue);
+      font-weight: 900;
+    }
+
+    .tool-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .tool-copy span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.25;
+    }
+
+    .tool-option::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      z-index: 10;
+      right: 0;
+      bottom: calc(100% + 8px);
+      width: min(280px, 90vw);
+      border: 1px solid #cfe0f5;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: var(--shadow);
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .tool-option:hover::after,
+    .tool-option:focus-visible::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .feedback {
       margin-top: 14px;
       border-radius: 8px;
@@ -984,6 +1039,30 @@
       { from: "client", text: "Please cure our website before more users lose trust." }
     ];
 
+    const cureTools = [
+      {
+        id: "scalpel",
+        name: "Scalpel",
+        label: "Remove manipulative extras",
+        icon: "S",
+        fallback: "Use this when the cure is to delete unnecessary pressure, fake claims, or manipulative interface parts."
+      },
+      {
+        id: "syringe",
+        name: "Syringe",
+        label: "Rewrite visual design or copy",
+        icon: "N",
+        fallback: "Use this when the cure is to change unfair wording, button hierarchy, or visual emphasis."
+      },
+      {
+        id: "magnifier",
+        name: "Magnifier",
+        label: "Reveal hidden information",
+        icon: "M",
+        fallback: "Use this when the cure is to make deliberately hidden or hard-to-find information clear and visible."
+      }
+    ];
+
     const patterns = {
       insurance: {
         title: "Travel Insurance",
@@ -1001,11 +1080,12 @@
         `,
         explanation: "Optional paid services should require active consent instead of being selected by default.",
         typeOptions: ["Preselection / Default Bias", "Scarcity", "Forced Continuity", "Hidden Costs"],
-        cureOptions: [
-          "Do not pre-select optional paid services. Present both choices equally and let users actively opt in.",
-          "Hide the refusal link until the user scrolls.",
-          "Make the insurance checkbox larger and brighter."
-        ],
+        correctTool: "syringe",
+        toolTips: {
+          scalpel: "Delete the manipulative hidden refusal copy, but deleting alone does not fix the unfair default state.",
+          syringe: "Change the choice design: do not pre-select optional paid services, and present both choices equally.",
+          magnifier: "Making the small refusal link larger helps visibility, but the paid option is still selected by default."
+        },
         lesson: "Consent should be active, informed, and easy to refuse."
       },
       seat: {
@@ -1024,11 +1104,12 @@
         `,
         explanation: "Refusal should be neutral. Ethical design respects the user's choice without guilt or pressure.",
         typeOptions: ["Confirmshaming", "Roach Motel", "Misdirection", "Nagging"],
-        cureOptions: [
-          "Use neutral language for refusal options. Do not shame users for declining an offer.",
-          "Warn the user that bad seats may ruin the trip.",
-          "Remove the skip option entirely."
-        ],
+        correctTool: "syringe",
+        toolTips: {
+          scalpel: "Removing the refusal option would make the flow less ethical, not more.",
+          syringe: "Rewrite the refusal copy with neutral language: use 'Skip seat selection' instead of shame-based wording.",
+          magnifier: "Making the refusal text larger does not remove the guilt or pressure from the wording."
+        },
         lesson: "Neutral language protects user dignity and autonomy."
       },
       costs: {
@@ -1045,11 +1126,12 @@
         `,
         explanation: "Users need full pricing information before they commit time and attention.",
         typeOptions: ["Hidden Costs", "Scarcity", "Preselection", "Social Proof"],
-        cureOptions: [
-          "Show all mandatory fees early and clearly before users invest time in the checkout process.",
-          "Show fees only after the card number is entered.",
-          "Rename service fees as travel support."
-        ],
+        correctTool: "magnifier",
+        toolTips: {
+          scalpel: "Deleting mandatory fees from the display would hide information even more.",
+          syringe: "Renaming fees is not enough if the costs still appear too late.",
+          magnifier: "Reveal all mandatory fees early and clearly before users invest time in checkout."
+        },
         lesson: "Transparent pricing prevents surprise and builds trust."
       },
       baggage: {
@@ -1068,11 +1150,12 @@
         `,
         explanation: "Visual hierarchy should clarify choices, not steer users away from declining.",
         typeOptions: ["Misdirection / Visual Hierarchy Manipulation", "Forced Action", "Sneaking", "Scarcity"],
-        cureOptions: [
-          "Make accept and decline options visually balanced, clear, and equally accessible.",
-          "Make the upgrade button flash until clicked.",
-          "Move the skip option below the payment button."
-        ],
+        correctTool: "syringe",
+        toolTips: {
+          scalpel: "Deleting one option would reduce user control instead of balancing the choice.",
+          syringe: "Adjust the visual hierarchy: make accept and decline options balanced, clear, and equally accessible.",
+          magnifier: "Enlarging only the skip link helps a little, but the whole visual hierarchy needs treatment."
+        },
         lesson: "Balanced choices make both paths equally reachable."
       },
       urgency: {
@@ -1087,11 +1170,12 @@
         `,
         explanation: "Urgency should inform the user, not manufacture panic.",
         typeOptions: ["False Urgency / Scarcity Pressure", "Hidden Subscription", "Obstruction", "Confirmshaming"],
-        cureOptions: [
-          "Only show urgency messages when they are accurate, verifiable, and relevant to the user’s decision.",
-          "Restart the countdown whenever it reaches zero.",
-          "Make the countdown larger and add warning sounds."
-        ],
+        correctTool: "scalpel",
+        toolTips: {
+          scalpel: "Remove fake countdowns and unverifiable scarcity claims; only keep urgency when it is accurate and relevant.",
+          syringe: "Changing the color or wording does not solve the fake pressure if the claim is still untrue.",
+          magnifier: "Making the countdown more visible would intensify the pressure instead of curing it."
+        },
         lesson: "Honest urgency avoids fake countdowns and pressure tactics."
       }
     };
@@ -1170,7 +1254,7 @@
           </div>
           <div class="question">
             <strong>How should we cure it?</strong>
-            <div id="cureOptions">${renderOptions(pattern.cureOptions, "cure")}</div>
+            <div id="cureOptions">${renderToolOptions(pattern)}</div>
           </div>
           <div class="panel-actions">
             <button class="primary" id="submitDiagnosis">Submit Diagnosis</button>
@@ -1187,6 +1271,21 @@
 
     function renderOptions(options, kind) {
       return options.map(option => `<button class="option" data-choice="${kind}" data-value="${escapeAttribute(option)}">${option}</button>`).join("");
+    }
+
+    function renderToolOptions(pattern) {
+      return cureTools.map(tool => {
+        const tooltip = pattern.toolTips?.[tool.id] || tool.fallback;
+        return `
+          <button class="option tool-option" data-choice="cure" data-value="${tool.id}" data-tooltip="${escapeAttribute(tooltip)}" title="${escapeAttribute(tooltip)}">
+            <span class="tool-icon">${tool.icon}</span>
+            <span class="tool-copy">
+              <strong>${tool.name}</strong>
+              <span>${tool.label}</span>
+            </span>
+          </button>
+        `;
+      }).join("");
     }
 
     function escapeAttribute(value) {
@@ -1213,7 +1312,7 @@
 
       state.attempts[id] += 1;
       const typeCorrect = state.selectedType === pattern.type;
-      const cureCorrect = state.selectedCure === pattern.cure;
+      const cureCorrect = state.selectedCure === pattern.correctTool;
 
       if (typeCorrect && cureCorrect) {
         const firstTry = state.attempts[id] === 1;
