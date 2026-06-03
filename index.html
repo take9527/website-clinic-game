@@ -569,13 +569,23 @@
     .tool-icon {
       display: grid;
       flex: 0 0 auto;
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       place-items: center;
       border-radius: 8px;
-      color: #fff;
-      background: var(--clinic-blue);
-      font-weight: 900;
+      color: var(--clinic-blue);
+      border: 1px solid rgba(58, 134, 255, 0.24);
+      background: #f1f7ff;
+    }
+
+    .tool-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
     .tool-copy {
@@ -1044,21 +1054,21 @@
         id: "scalpel",
         name: "Scalpel",
         label: "Remove manipulative extras",
-        icon: "S",
+        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 3.5l6 6"/><path d="M19 8l-8.8 8.8a3 3 0 0 1-4.2 0l-.8-.8L16 5z"/><path d="M4 20h8"/></svg>`,
         fallback: "Use this when the cure is to delete unnecessary pressure, fake claims, or manipulative interface parts."
       },
       {
         id: "syringe",
         name: "Syringe",
         label: "Rewrite visual design or copy",
-        icon: "N",
+        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2l4 4"/><path d="M15 5l4 4"/><path d="M11 9l5 5"/><path d="M4 20l7.5-7.5"/><path d="M8 8l8 8"/><path d="M6 18l-2 2"/><path d="M13 6l1.5-1.5"/><path d="M18.5 10.5L20 9"/></svg>`,
         fallback: "Use this when the cure is to change unfair wording, button hierarchy, or visual emphasis."
       },
       {
         id: "magnifier",
         name: "Magnifier",
         label: "Reveal hidden information",
-        icon: "M",
+        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/><path d="M8.5 10.5h4"/><path d="M10.5 8.5v4"/></svg>`,
         fallback: "Use this when the cure is to make deliberately hidden or hard-to-find information clear and visible."
       }
     ];
