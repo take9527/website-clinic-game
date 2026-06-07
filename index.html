@@ -3,1456 +3,1384 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Website Clinic: Cure the Dark Patterns</title>
+  <title>Website Clinic</title>
   <style>
     :root {
-      --clinic-blue: #3a86ff;
-      --blue-dark: #1559bf;
-      --symptom-red: #ef3e4a;
-      --cure-green: #4caf7d;
-      --soft-white: #f7f8fa;
-      --ink: #1e2a36;
-      --muted: #7a8794;
-      --line: #dce3eb;
-      --amber: #ffb020;
-      --panel: #ffffff;
-      --shadow: 0 18px 50px rgba(30, 42, 54, 0.12);
+      --bg: #101615;
+      --panel: #182220;
+      --panel-soft: #22302d;
+      --panel-bright: #2a3c38;
+      --text: #edf5ef;
+      --text-muted: #98aaa2;
+      --clinic-green: #9be7c0;
+      --warning-red: #ff6b6b;
+      --sick-yellow: #ffd166;
+      --diagnosis-blue: #7aa7ff;
+      --border: rgba(155, 231, 192, 0.22);
+      --shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+      --radius: 8px;
+      --scan: linear-gradient(rgba(255,255,255,0.03) 50%, rgba(0,0,0,0.04) 50%);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--ink);
+      color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--soft-white);
+      background:
+        linear-gradient(rgba(155, 231, 192, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(155, 231, 192, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 20% 8%, rgba(122, 167, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 90% 18%, rgba(255, 107, 107, 0.09), transparent 26%),
+        var(--bg);
+      background-size: 38px 38px, 38px 38px, auto, auto, auto;
       letter-spacing: 0;
     }
 
-    button, input {
-      font: inherit;
-    }
+    button, select { font: inherit; }
+    button { cursor: pointer; border: 0; }
 
-    button {
-      border: 0;
-      cursor: pointer;
-    }
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
 
-    .screen {
-      display: none;
-      min-height: 100vh;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .intro {
-      padding: 32px 18px;
-      background:
-        linear-gradient(180deg, rgba(58, 134, 255, 0.08), rgba(76, 175, 125, 0.08)),
-        var(--soft-white);
-    }
-
-    .intro-shell {
-      width: min(460px, 100%);
+    .app-frame {
+      width: min(1380px, calc(100% - 28px));
       margin: 0 auto;
+      padding: 22px 0;
     }
 
-    .intro-title {
-      margin: 0 0 18px;
-      text-align: center;
-    }
-
-    .intro-title h1 {
-      margin: 0 0 6px;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      line-height: 1.02;
-    }
-
-    .intro-title p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .phone {
-      min-height: 660px;
-      border: 10px solid #172433;
-      border-radius: 34px;
-      background: #fdfefe;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .phone-top {
+    .clinic-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--line);
-      background: #fff;
+      gap: 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: rgba(24, 34, 32, 0.82);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
-    .avatar-line {
+    .brand-line {
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 12px;
       min-width: 0;
     }
 
-    .avatar {
+    .brand-mark {
       display: grid;
-      width: 34px;
-      height: 34px;
+      width: 44px;
+      height: 44px;
       place-items: center;
-      border-radius: 50%;
-      color: #fff;
-      background: var(--clinic-blue);
-      font-weight: 800;
+      border: 1px solid rgba(155, 231, 192, 0.38);
+      border-radius: var(--radius);
+      color: var(--clinic-green);
+      background: rgba(155, 231, 192, 0.08);
+      font-weight: 900;
     }
 
-    .contact {
-      min-width: 0;
-    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 4px; font-size: clamp(1.7rem, 4vw, 3.4rem); line-height: 1; }
+    h2 { margin-bottom: 10px; }
+    h3 { margin-bottom: 8px; }
+    p { line-height: 1.45; }
 
-    .contact strong {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .muted { color: var(--text-muted); }
 
-    .contact span {
-      color: var(--cure-green);
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--clinic-green);
       font-size: 0.78rem;
-      font-weight: 700;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--clinic-green);
+      box-shadow: 0 0 14px rgba(155, 231, 192, 0.72);
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0 14px;
+      color: var(--text);
+      background: var(--panel-soft);
+      font-weight: 850;
+    }
+
+    .btn:hover { border-color: rgba(155, 231, 192, 0.58); background: var(--panel-bright); }
+    .btn.primary { color: #092019; background: var(--clinic-green); border-color: var(--clinic-green); }
+    .btn.danger { color: #231312; background: var(--warning-red); border-color: var(--warning-red); }
+    .btn.ghost { background: transparent; }
+    .btn.small { min-height: 34px; padding: 0 10px; font-size: 0.88rem; }
+
+    .intro-layout {
+      display: grid;
+      min-height: calc(100vh - 44px);
+      grid-template-columns: minmax(0, 1fr) 430px;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero-panel, .phone, .case-card, .game-panel, .toolbar, .diagnosis-panel, .report-panel, .modal-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(24, 34, 32, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 56px);
+    }
+
+    .hero-panel::before, .web-slice::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.38;
+      pointer-events: none;
+      background-image: var(--scan);
+      background-size: 100% 6px;
+    }
+
+    .hero-panel h1 {
+      max-width: 900px;
+      margin-bottom: 16px;
+    }
+
+    .hero-panel p {
+      max-width: 720px;
+      color: var(--text-muted);
+      font-size: 1.04rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .stat-tile {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(34, 48, 45, 0.78);
+    }
+
+    .stat-tile strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--clinic-green);
+      font-size: 1.6rem;
+    }
+
+    .phone {
+      min-height: 640px;
+      overflow: hidden;
+      background: #111817;
+    }
+
+    .phone-head {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding: 14px;
+      background: #16201e;
     }
 
     .chat {
       display: flex;
+      min-height: 510px;
       flex-direction: column;
       gap: 12px;
-      min-height: 520px;
-      padding: 18px;
+      padding: 16px;
     }
 
     .bubble {
-      max-width: 82%;
-      padding: 12px 14px;
+      max-width: 86%;
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 18px;
-      line-height: 1.35;
-      animation: bubbleIn 260ms ease both;
+      padding: 12px 14px;
+      animation: bubbleIn 240ms ease both;
     }
 
-    .bubble.client {
-      align-self: flex-start;
-      border-bottom-left-radius: 6px;
-      background: #eef3f8;
-    }
-
-    .bubble.doctor {
-      align-self: flex-end;
-      border-bottom-right-radius: 6px;
-      color: #fff;
-      background: var(--clinic-blue);
-    }
+    .bubble.client { align-self: flex-start; background: #22302d; border-bottom-left-radius: 5px; }
+    .bubble.doctor { align-self: flex-end; color: #092019; background: var(--clinic-green); border-bottom-right-radius: 5px; }
 
     .phone-actions {
       display: flex;
       gap: 10px;
-      padding: 0 18px 18px;
+      padding: 0 16px 16px;
     }
 
-    .primary,
-    .secondary,
-    .ghost {
-      min-height: 44px;
-      border-radius: 8px;
-      padding: 0 16px;
-      font-weight: 800;
-    }
-
-    .primary {
-      color: #fff;
-      background: var(--clinic-blue);
-    }
-
-    .primary:hover {
-      background: var(--blue-dark);
-    }
-
-    .secondary {
-      color: var(--ink);
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-
-    .ghost {
-      color: var(--clinic-blue);
-      background: transparent;
-    }
-
-    .game-screen {
-      min-height: 100vh;
+    .case-grid {
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-columns: repeat(5, minmax(170px, 1fr));
+      gap: 14px;
     }
 
-    .topbar,
-    .bottombar {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      justify-content: space-between;
-      padding: 14px 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(14px);
+    .case-card {
+      position: relative;
+      min-height: 300px;
+      overflow: hidden;
+      padding: 16px;
+      text-align: left;
     }
 
-    .bottombar {
-      border-top: 1px solid var(--line);
-      border-bottom: 0;
-      flex-wrap: wrap;
+    .case-card:hover { border-color: rgba(155, 231, 192, 0.72); transform: translateY(-2px); }
+    .case-card::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -38px;
+      width: 150px;
+      height: 150px;
+      border: 1px solid rgba(155, 231, 192, 0.14);
+      border-radius: 50%;
     }
 
-    .brand h1 {
-      margin: 0;
-      font-size: 1.28rem;
-      line-height: 1.1;
-    }
+    .case-card h3 { font-size: 1.12rem; }
+    .case-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 
-    .brand p,
-    .hint {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .status {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .pill {
+    .chip {
       display: inline-flex;
-      min-height: 34px;
+      min-height: 26px;
       align-items: center;
-      gap: 8px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: 999px;
-      padding: 0 12px;
-      background: #fff;
-      font-size: 0.9rem;
-      font-weight: 800;
+      padding: 0 9px;
+      color: var(--text-muted);
+      background: rgba(16, 22, 21, 0.36);
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .chip.green { color: var(--clinic-green); }
+    .chip.yellow { color: var(--sick-yellow); }
+    .chip.red { color: var(--warning-red); }
+    .chip.blue { color: var(--diagnosis-blue); }
+
+    .case-progress {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
     }
 
     .meter {
-      width: 120px;
       height: 8px;
       overflow: hidden;
       border-radius: 999px;
-      background: #e8edf3;
+      background: rgba(255,255,255,0.08);
     }
 
     .meter span {
       display: block;
-      width: 100%;
       height: 100%;
+      width: 0;
       border-radius: inherit;
-      background: var(--cure-green);
-      transition: width 240ms ease;
+      background: linear-gradient(90deg, var(--clinic-green), var(--diagnosis-blue));
     }
 
-    .clinic-layout {
+    .game-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.55fr);
-      gap: 20px;
-      padding: 22px;
-      min-height: 0;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 16px;
+      align-items: start;
     }
 
-    .booking-page,
-    .doctor-panel,
-    .report-shell {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-    }
-
-    .booking-page {
+    .game-panel {
       overflow: hidden;
+      min-height: 720px;
     }
 
-    .airline-header {
-      display: grid;
-      grid-template-columns: 1fr auto;
+    .case-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
       gap: 12px;
-      align-items: center;
-      padding: 20px;
-      color: #fff;
-      background: linear-gradient(135deg, #154c91, #3a86ff);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+      background: rgba(34, 48, 45, 0.82);
     }
 
-    .airline-logo {
+    .page-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(16, 22, 21, 0.42);
+    }
+
+    .page-tab {
+      min-height: 32px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 0 10px;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .page-tab.active {
+      color: #092019;
+      border-color: var(--clinic-green);
+      background: var(--clinic-green);
+    }
+
+    .web-slice {
+      position: relative;
+      margin: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      background: #eff4f1;
+      color: #1b2522;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+    }
+
+    .mock-top {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      min-width: 0;
+      padding: 14px 16px;
+      color: #f5fff9;
+      background: #172d28;
     }
 
-    .logo-mark {
-      display: grid;
-      width: 42px;
-      height: 42px;
-      place-items: center;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.18);
-      font-weight: 900;
-    }
-
-    .airline-header h2,
-    .airline-header p {
-      margin: 0;
-    }
-
-    .airline-header p {
-      opacity: 0.88;
-      font-size: 0.92rem;
-    }
-
-    .urgency {
-      display: grid;
-      gap: 4px;
-      padding: 10px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.45);
-      border-radius: 8px;
-      text-align: right;
-      background: rgba(239, 62, 74, 0.22);
-    }
-
-    .urgency strong {
-      font-size: 0.9rem;
-    }
-
-    .urgency span {
-      font-variant-numeric: tabular-nums;
-      font-weight: 900;
-    }
-
-    .booking-body {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 260px;
-      gap: 18px;
-      padding: 18px;
-      background: #f9fbfd;
-    }
-
-    .modules {
+    .mock-body {
       display: grid;
       gap: 14px;
+      padding: 16px;
     }
 
-    .module,
-    .summary-box {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
+    .mock-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .mock-card, .symptom-node {
+      border: 1px solid #d4ded9;
+      border-radius: var(--radius);
+      padding: 14px;
       background: #fff;
     }
 
-    .module h3,
-    .summary-box h3 {
-      margin: 0 0 10px;
-      font-size: 1rem;
+    .mock-card.dark {
+      color: #ecf8ef;
+      border-color: #27413a;
+      background: #20332f;
     }
 
-    .module p,
-    .summary-box p {
-      margin: 6px 0;
-    }
-
-    .flight-row,
-    .price-row {
+    .fake-ui {
       display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      border-bottom: 1px solid #edf1f5;
-      padding: 7px 0;
-    }
-
-    .flight-row:last-child,
-    .price-row:last-child {
-      border-bottom: 0;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .small-link {
-      display: inline-block;
-      margin-top: 8px;
-      color: #9aa6b2;
-      font-size: 0.8rem;
-      text-decoration: underline;
-    }
-
-    .shame-copy {
-      display: inline-block;
+      flex-wrap: wrap;
+      gap: 8px;
       margin-top: 10px;
-      color: #687586;
-      font-size: 0.9rem;
-      text-decoration: underline;
     }
 
-    .upsell-main {
-      width: 100%;
-      min-height: 54px;
-      margin-top: 8px;
-      border-radius: 8px;
+    .fake-button {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      border-radius: var(--radius);
+      padding: 0 10px;
       color: #fff;
-      background: var(--symptom-red);
-      font-weight: 900;
+      background: #235fdb;
+      font-size: 0.86rem;
+      font-weight: 850;
     }
 
-    .skip-tiny {
-      display: block;
-      width: max-content;
-      margin: 8px auto 0;
-      color: #a7b0bb;
-      font-size: 0.78rem;
-      text-decoration: none;
-    }
+    .fake-button.weak { color: #84928c; background: transparent; text-decoration: underline; }
+    .fake-button.red { background: #cc3541; }
+    .fake-button.green { background: #32835d; }
+    .fake-button.yellow { color: #251d07; background: #ffd166; }
 
-    .fee-box {
-      margin-top: 10px;
-      border: 1px dashed rgba(239, 62, 74, 0.55);
-      border-radius: 8px;
-      padding: 10px;
-      background: rgba(239, 62, 74, 0.06);
-    }
-
-    .final-total {
-      color: var(--symptom-red);
-      font-size: 1.25rem;
-      font-weight: 900;
-    }
-
-    .confirm {
-      width: 100%;
-      min-height: 48px;
-      margin-top: 14px;
-      border-radius: 8px;
-      color: #fff;
-      background: var(--clinic-blue);
-      font-weight: 900;
-    }
-
-    .hotspot {
+    .symptom-node {
       position: relative;
-      outline: 0 solid transparent;
-      transition: box-shadow 160ms ease, outline-color 160ms ease, background 160ms ease;
+      min-height: 116px;
+      text-align: left;
+      transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
     }
 
-    .hotspot:hover {
-      outline: 2px solid rgba(239, 62, 74, 0.34);
-      box-shadow: 0 0 0 5px rgba(239, 62, 74, 0.08);
+    .inspect-on .symptom-node:not(.repaired):hover {
+      border-color: rgba(255, 107, 107, 0.78);
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12), 0 0 22px rgba(255, 107, 107, 0.18);
+      transform: translateY(-1px);
     }
 
-    .hotspot.selected {
-      outline: 2px solid var(--amber);
-      box-shadow: 0 0 0 5px rgba(255, 176, 32, 0.18);
+    .inspect-on .symptom-node:not(.repaired)::before {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--warning-red);
+      box-shadow: 0 0 16px rgba(255, 107, 107, 0.72);
     }
 
-    .hotspot.cured {
-      outline: 2px solid var(--cure-green);
-      box-shadow: 0 0 0 5px rgba(76, 175, 125, 0.13);
+    .symptom-node.repaired {
+      border-color: rgba(76, 175, 125, 0.45);
+      background: #f2fbf5;
     }
 
-    .hotspot.cured::after {
-      content: "Cured";
+    .symptom-node.repaired::after {
+      content: "CURED";
       position: absolute;
       right: 10px;
       top: 10px;
       border-radius: 999px;
       padding: 4px 8px;
-      color: #fff;
-      background: var(--cure-green);
-      font-size: 0.72rem;
+      color: #0c251a;
+      background: #9be7c0;
+      font-size: 0.7rem;
       font-weight: 900;
     }
 
-    .doctor-panel {
-      align-self: start;
+    .toolbar, .diagnosis-panel {
+      padding: 14px;
+    }
+
+    .toolbar {
       position: sticky;
-      top: 90px;
-      padding: 18px;
-      min-height: 520px;
-    }
-
-    .panel-empty {
+      top: 14px;
       display: grid;
-      place-items: center;
-      min-height: 480px;
-      text-align: center;
-      color: var(--muted);
+      gap: 12px;
     }
 
-    .scope {
-      display: grid;
-      width: 96px;
-      height: 96px;
-      place-items: center;
-      margin: 0 auto 16px;
-      border: 2px solid #cfe0f5;
-      border-radius: 50%;
-      color: var(--clinic-blue);
-      background: #f1f7ff;
-      font-size: 2.4rem;
+    .tool-section {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: rgba(34, 48, 45, 0.72);
     }
 
-    .diagnosis-card h2 {
-      margin: 0 0 6px;
-      font-size: 1.24rem;
-    }
+    .tool-section h3 { font-size: 0.94rem; }
 
-    .diagnosis-card > p {
-      margin: 0 0 16px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .question {
-      margin-top: 16px;
-    }
-
-    .question strong {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .option {
+    .toolbar-line {
       display: flex;
-      width: 100%;
-      min-height: 42px;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 7px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .toolbar-line:last-child { border-bottom: 0; }
+    .toolbar-line strong { color: var(--text); }
+
+    .switch {
+      display: flex;
       align-items: center;
-      margin-bottom: 8px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 8px 10px;
-      background: #fff;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .switch button {
+      width: 54px;
+      height: 30px;
+      border-radius: 999px;
+      padding: 3px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .switch button span {
+      display: block;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .switch button.on span { transform: translateX(24px); background: var(--clinic-green); }
+
+    .diagnosis-panel {
+      margin-top: 12px;
+      min-height: 340px;
+      background: rgba(16, 22, 21, 0.52);
+    }
+
+    .diagnosis-empty {
+      display: grid;
+      min-height: 300px;
+      place-items: center;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .field { margin: 14px 0; }
+    .field label { display: block; margin-bottom: 7px; color: var(--text-muted); font-size: 0.86rem; font-weight: 850; }
+
+    .choice-list { display: grid; gap: 8px; }
+
+    .choice {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      color: var(--text);
+      background: rgba(34, 48, 45, 0.86);
       text-align: left;
       line-height: 1.25;
     }
 
-    .option:hover,
-    .option.active {
-      border-color: var(--clinic-blue);
-      background: #f1f7ff;
-    }
-
-    .tool-option {
-      position: relative;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .tool-icon {
-      display: grid;
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      place-items: center;
-      border-radius: 8px;
-      color: var(--clinic-blue);
-      border: 1px solid rgba(58, 134, 255, 0.24);
-      background: #f1f7ff;
-    }
-
-    .tool-icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-    }
-
-    .tool-copy {
-      display: grid;
-      gap: 2px;
-    }
-
-    .tool-copy span {
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.25;
-    }
-
-    .tool-option::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      z-index: 10;
-      right: 0;
-      bottom: calc(100% + 8px);
-      width: min(280px, 90vw);
-      border: 1px solid #cfe0f5;
-      border-radius: 8px;
-      padding: 10px 12px;
-      color: var(--ink);
-      background: #fff;
-      box-shadow: var(--shadow);
-      line-height: 1.35;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(4px);
-      transition: opacity 140ms ease, transform 140ms ease;
-    }
-
-    .tool-option:hover::after,
-    .tool-option:focus-visible::after {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .choice:hover, .choice.active { border-color: var(--diagnosis-blue); background: rgba(122, 167, 255, 0.16); }
 
     .feedback {
-      margin-top: 14px;
-      border-radius: 8px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 12px;
-      line-height: 1.42;
+      background: rgba(34, 48, 45, 0.78);
     }
 
-    .feedback.correct {
-      border: 1px solid rgba(76, 175, 125, 0.45);
-      background: rgba(76, 175, 125, 0.1);
-    }
+    .feedback.good { border-color: rgba(155, 231, 192, 0.5); }
+    .feedback.bad { border-color: rgba(255, 107, 107, 0.5); }
+    .feedback.warn { border-color: rgba(255, 209, 102, 0.5); }
 
-    .feedback.warn {
-      border: 1px solid rgba(255, 176, 32, 0.45);
-      background: rgba(255, 176, 32, 0.12);
-    }
-
-    .feedback.bad {
-      border: 1px solid rgba(239, 62, 74, 0.35);
-      background: rgba(239, 62, 74, 0.1);
-    }
-
-    .feedback h3 {
-      margin: 0 0 6px;
-    }
-
-    .feedback p {
-      margin: 6px 0;
-    }
-
-    .panel-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .cured-version {
-      border-color: rgba(76, 175, 125, 0.38);
-      background: #f3fbf7;
-    }
-
-    .choice-row {
-      display: grid;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .choice-row label,
-    .choice-button {
-      display: flex;
-      min-height: 42px;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid #bfd8ca;
-      border-radius: 8px;
-      padding: 8px 10px;
-      color: var(--ink);
-      background: #fff;
-      font-weight: 700;
-    }
-
-    .balanced-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    details.research-note {
       margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 10px;
+      color: var(--text-muted);
+      background: rgba(16, 22, 21, 0.46);
+      font-size: 0.88rem;
     }
 
-    .balanced-buttons button {
-      min-height: 44px;
-      border: 1px solid #bfd8ca;
-      border-radius: 8px;
-      background: #fff;
-      font-weight: 800;
+    details.research-note summary {
+      color: var(--diagnosis-blue);
+      cursor: pointer;
+      font-weight: 850;
     }
 
-    .balanced-buttons button:first-child {
-      color: #fff;
-      border-color: var(--cure-green);
-      background: var(--cure-green);
-    }
-
-    .result {
-      padding: 28px 18px;
-    }
-
-    .report-shell {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .report-hero {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 18px;
-    }
-
-    .report-hero h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1;
-    }
-
-    .report-hero p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 680px;
-      line-height: 1.45;
-    }
-
-    .score-badge {
-      min-width: 150px;
-      border-radius: 8px;
-      padding: 16px;
-      color: #fff;
-      background: var(--clinic-blue);
-      text-align: center;
-    }
-
-    .score-badge strong {
-      display: block;
-      font-size: 2rem;
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 18px 0;
-    }
-
-    .metric {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      background: #fff;
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 1.7rem;
+    .report-panel {
+      padding: 18px;
     }
 
     .report-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
     }
 
     .report-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 14px;
-      background: #fff;
+      background: rgba(34, 48, 45, 0.64);
     }
 
-    .report-card h3 {
-      margin: 0 0 8px;
-    }
-
-    .report-card p {
-      margin: 6px 0;
-      line-height: 1.42;
-    }
-
-    .principles {
-      margin-top: 18px;
-      border: 1px solid rgba(58, 134, 255, 0.25);
-      border-radius: 8px;
-      padding: 16px;
-      background: #f2f8ff;
-    }
-
-    .principles h2 {
-      margin: 0 0 10px;
-    }
-
-    .principles ul {
+    .report-list {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
+      margin-top: 10px;
     }
 
-    .principles li {
-      border: 1px solid #cfe0f5;
-      border-radius: 8px;
+    .report-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
       padding: 10px;
-      background: #fff;
-      line-height: 1.35;
+      background: rgba(16, 22, 21, 0.4);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.64);
+    }
+
+    .modal-backdrop.active { display: grid; }
+
+    .modal-card {
+      width: min(880px, 100%);
+      max-height: min(760px, 88vh);
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
     @keyframes bubbleIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 980px) {
-      .clinic-layout,
-      .booking-body {
-        grid-template-columns: 1fr;
-      }
-
-      .doctor-panel {
-        position: static;
-        min-height: 360px;
-      }
-
-      .report-grid,
-      .metrics,
-      .principles ul {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 1120px) {
+      .intro-layout, .game-grid { grid-template-columns: 1fr; }
+      .case-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { position: static; }
     }
 
-    @media (max-width: 640px) {
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .status {
-        justify-content: flex-start;
-      }
-
-      .clinic-layout {
-        padding: 12px;
-      }
-
-      .airline-header,
-      .report-hero {
-        grid-template-columns: 1fr;
-        flex-direction: column;
-      }
-
-      .urgency {
-        text-align: left;
-      }
-
-      .balanced-buttons {
-        grid-template-columns: 1fr;
-      }
-
-      .phone {
-        min-height: 620px;
-        border-width: 7px;
-      }
+    @media (max-width: 720px) {
+      .app-frame { width: min(100% - 18px, 1380px); padding: 10px 0; }
+      .clinic-top, .case-header { flex-direction: column; align-items: stretch; }
+      .case-grid, .mock-row, .report-grid, .glossary-grid, .hero-stats { grid-template-columns: 1fr; }
+      .phone { min-height: 560px; }
     }
   </style>
 </head>
 <body>
-  <main id="introScreen" class="screen intro active">
-    <section class="intro-shell">
-      <div class="intro-title">
+  <main id="introScreen" class="screen active">
+    <div class="app-frame intro-layout">
+      <section class="hero-panel">
+        <span class="kicker"><span class="status-dot"></span> Digital Pathology Intake</span>
         <h1>Website Clinic</h1>
-        <p>Diagnose dark patterns. Cure the interface. Restore user trust.</p>
-      </div>
-      <div class="phone" id="phone">
-        <div class="phone-top">
-          <div class="avatar-line">
-            <div class="avatar">C</div>
-            <div class="contact">
-              <strong>Client Message</strong>
-              <span>Incoming case</span>
-            </div>
-          </div>
-          <strong>Clinic</strong>
+        <p>Diagnose deceptive design, repair sick interfaces, and restore user trust across five simulated web flows.</p>
+        <div class="hero-stats">
+          <div class="stat-tile"><strong>5</strong><span class="muted">clinic cases</span></div>
+          <div class="stat-tile"><strong>40</strong><span class="muted">dark patterns</span></div>
+          <div class="stat-tile"><strong>3</strong><span class="muted">diagnosis checks</span></div>
+        </div>
+      </section>
+      <section class="phone">
+        <div class="phone-head">
+          <strong>Client Message</strong>
+          <span class="chip green">Incoming case</span>
         </div>
         <div class="chat" id="chat"></div>
         <div class="phone-actions">
-          <button class="primary" id="continueBtn">Continue</button>
-          <button class="secondary" id="acceptBtn" hidden>Accept Case</button>
+          <button class="btn primary" id="continueIntro">Continue</button>
+          <button class="btn primary" id="openCases" hidden>Open Case Cabinet</button>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <main id="gameScreen" class="screen game-screen">
-    <header class="topbar">
-      <div class="brand">
-        <h1>Website Clinic</h1>
-        <p>Diagnose the booking page</p>
-      </div>
-      <div class="status">
-        <div class="pill"><span id="progressText">0 / 5</span> Dark Patterns found</div>
-        <div class="pill">Trust <div class="meter"><span id="trustFill"></span></div><span id="trustText">100%</span></div>
-      </div>
-    </header>
-
-    <section class="clinic-layout">
-      <article class="booking-page" aria-label="Simulated booking website">
-        <div class="airline-header">
-          <div class="airline-logo">
-            <div class="logo-mark">FF</div>
-            <div>
-              <h2>FlyFast Airlines</h2>
-              <p>Complete Your Booking</p>
-            </div>
-          </div>
-          <div class="urgency hotspot" data-pattern="urgency" role="button" tabindex="0">
-            <strong>Only 2 seats left at this price!</strong>
-            <span id="timer">Offer expires in 04:59</span>
-          </div>
-        </div>
-        <div class="booking-body">
-          <div class="modules">
-            <section class="module">
-              <h3>Flight Summary</h3>
-              <div class="flight-row"><span>Route</span><strong>London to Lisbon</strong></div>
-              <div class="flight-row"><span>Date</span><strong>18 July</strong></div>
-              <div class="flight-row"><span>Base fare</span><strong>€49.99</strong></div>
-            </section>
-
-            <section class="module hotspot" data-pattern="seat" role="button" tabindex="0" id="module-seat">
-              <h3>Seat Selection</h3>
-              <p>Choose your seat now and sit with your travel partner.</p>
-              <button class="secondary">Select my seat</button>
-              <a class="shame-copy">No thanks, I don’t care where I sit</a>
-            </section>
-
-            <section class="module hotspot" data-pattern="insurance" role="button" tabindex="0" id="module-insurance">
-              <h3>Travel Insurance</h3>
-              <p>Protect your trip for only €18.99.</p>
-              <label><input type="checkbox" checked> Yes, add travel insurance to my booking</label>
-              <a class="small-link">No thanks, I will take the risk</a>
-            </section>
-
-            <section class="module hotspot" data-pattern="baggage" role="button" tabindex="0" id="module-baggage">
-              <h3>Extra Baggage</h3>
-              <p>Add priority boarding and cabin bag?</p>
-              <button class="upsell-main">Yes, upgrade my trip</button>
-              <a class="skip-tiny">skip for now</a>
-            </section>
-          </div>
-
-          <aside class="summary-box">
-            <h3>Final Payment</h3>
-            <div class="price-row"><span>Displayed total</span><strong>€49.99</strong></div>
-            <div class="fee-box hotspot" data-pattern="costs" role="button" tabindex="0">
-              <div class="price-row"><span>Service Fee</span><strong>€12.50</strong></div>
-              <div class="price-row"><span>Payment Processing Fee</span><strong>€5.00</strong></div>
-              <p class="final-total">Final Total: €67.49</p>
-            </div>
-            <button class="confirm">Confirm Booking</button>
-          </aside>
-        </div>
-      </article>
-
-      <aside class="doctor-panel" id="doctorPanel" aria-live="polite">
-        <div class="panel-empty">
-          <div>
-            <div class="scope">+</div>
-            <h2>Scan the interface</h2>
-            <p>Click suspicious interface elements to diagnose possible dark patterns.</p>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <footer class="bottombar">
-      <p class="hint" id="hintText">Tip: suspicious elements often make one choice easier, faster, or more emotional than the other.</p>
-      <button class="primary" id="finishBtn">Finish Diagnosis</button>
-    </footer>
-  </main>
-
-  <main id="resultScreen" class="screen result">
-    <section class="report-shell">
-      <div class="report-hero">
-        <div>
-          <h1>Diagnosis Complete</h1>
-          <p>You replaced manipulation with clarity, consent, and user control.</p>
-        </div>
-        <div class="score-badge">
-          <span>Score</span>
-          <strong id="scoreText">0</strong>
-        </div>
-      </div>
-      <div class="metrics">
-        <div class="metric"><span>Found</span><strong id="foundMetric">0 / 5</strong></div>
-        <div class="metric"><span>Cured</span><strong id="curedMetric">0 / 5</strong></div>
-        <div class="metric"><span>Final Trust</span><strong id="trustMetric">100%</strong></div>
-      </div>
-      <div class="report-grid" id="reportGrid"></div>
-      <section class="principles">
-        <h2>Ethical Design Principles</h2>
-        <ul>
-          <li><strong>Transparency</strong><br>Show costs, consequences, and choices clearly.</li>
-          <li><strong>User Control</strong><br>Let users actively choose instead of relying on manipulative defaults.</li>
-          <li><strong>Neutral Language</strong><br>Avoid guilt, shame, fear, or pressure in interface copy.</li>
-          <li><strong>Balanced Choices</strong><br>Make accept and decline options equally visible and accessible.</li>
-          <li><strong>Honest Urgency</strong><br>Use urgency only when it is accurate, verifiable, and relevant.</li>
-        </ul>
       </section>
-      <div class="panel-actions">
-        <button class="primary" id="restartBtn">Start New Case</button>
-      </div>
-    </section>
+    </div>
   </main>
+
+  <main id="caseScreen" class="screen">
+    <div class="app-frame">
+      <header class="clinic-top">
+        <div class="brand-line">
+          <div class="brand-mark">WC</div>
+          <div>
+            <span class="kicker"><span class="status-dot"></span> Case Archive</span>
+            <h1>Patient Web Flows</h1>
+            <p class="muted">Choose a case file. Each site has multiple pages and eight symptoms to diagnose.</p>
+          </div>
+        </div>
+        <button class="btn" id="openGlossary">Research Library</button>
+      </header>
+      <section class="case-grid" id="caseGrid"></section>
+    </div>
+  </main>
+
+  <main id="gameScreen" class="screen">
+    <div class="app-frame">
+      <header class="clinic-top">
+        <div class="brand-line">
+          <div class="brand-mark">UX</div>
+          <div>
+            <span class="kicker"><span class="status-dot"></span><span id="caseKicker">Case</span></span>
+            <h1 id="caseTitle">Case</h1>
+            <p class="muted" id="caseBrief">Brief</p>
+          </div>
+        </div>
+        <div class="fake-ui">
+          <button class="btn" id="backToCases">Case Cabinet</button>
+          <button class="btn primary" id="finishCase">Finish Report</button>
+        </div>
+      </header>
+      <section class="game-grid">
+        <article class="game-panel" id="gamePanel"></article>
+        <aside>
+          <section class="toolbar" id="toolbar"></section>
+          <section class="diagnosis-panel" id="diagnosisPanel"></section>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <main id="reportScreen" class="screen">
+    <div class="app-frame">
+      <section class="report-panel" id="reportPanel"></section>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="modal">
+    <section class="modal-card">
+      <div class="clinic-top" style="margin-bottom:14px">
+        <div>
+          <span class="kicker"><span class="status-dot"></span> Research Library</span>
+          <h2>Dark Pattern Glossary</h2>
+        </div>
+        <button class="btn" id="closeModal">Close</button>
+      </div>
+      <div class="glossary-grid" id="glossaryGrid"></div>
+    </section>
+  </div>
 
   <script>
-    const messages = [
-      { from: "client", text: "Hi Doctor, I need your help." },
-      { from: "client", text: "Our travel booking website is making users angry. They say it feels confusing, pushy, and impossible to leave." },
-      { from: "doctor", text: "Sounds like a possible Dark Pattern infection." },
-      { from: "client", text: "Dark Pattern?" },
-      { from: "doctor", text: "A design trick that manipulates users into doing things they may not actually want to do." },
-      { from: "client", text: "Can you diagnose it?" },
-      { from: "doctor", text: "Yes. I’ll inspect the interface, identify the symptoms, and prescribe ethical design fixes." },
-      { from: "client", text: "Please cure our website before more users lose trust." }
+    const categories = [
+      "Nagging", "Obstruction", "Sneaking", "Interface Interference", "Forced Action",
+      "Urgency", "Scarcity", "Social Proof", "Privacy", "Emotional Steering",
+      "Confirmshaming", "Hidden Costs", "Preselection", "Hard to Cancel",
+      "Comparison Prevention", "Hidden Subscription", "Bait and Switch"
     ];
 
-    const cureTools = [
-      {
-        id: "scalpel",
-        name: "Scalpel",
-        label: "Remove manipulative extras",
-        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 3.5l6 6"/><path d="M19 8l-8.8 8.8a3 3 0 0 1-4.2 0l-.8-.8L16 5z"/><path d="M4 20h8"/></svg>`,
-        fallback: "Use this when the cure is to delete unnecessary pressure, fake claims, or manipulative interface parts."
-      },
-      {
-        id: "syringe",
-        name: "Syringe",
-        label: "Rewrite visual design or copy",
-        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2l4 4"/><path d="M15 5l4 4"/><path d="M11 9l5 5"/><path d="M4 20l7.5-7.5"/><path d="M8 8l8 8"/><path d="M6 18l-2 2"/><path d="M13 6l1.5-1.5"/><path d="M18.5 10.5L20 9"/></svg>`,
-        fallback: "Use this when the cure is to change unfair wording, button hierarchy, or visual emphasis."
-      },
-      {
-        id: "magnifier",
-        name: "Magnifier",
-        label: "Reveal hidden information",
-        icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/><path d="M8.5 10.5h4"/><path d="M10.5 8.5v4"/></svg>`,
-        fallback: "Use this when the cure is to make deliberately hidden or hard-to-find information clear and visible."
-      }
+    const harmOptions = [
+      "It hides key information.",
+      "It makes refusal emotionally difficult.",
+      "It adds unnecessary steps.",
+      "It collects unnecessary data.",
+      "It pressures users with unverifiable claims.",
+      "It makes comparison or reversal harder."
     ];
 
-    const patterns = {
-      insurance: {
-        title: "Travel Insurance",
-        type: "Preselection / Default Bias",
-        symptom: "The paid travel insurance option is selected by default, while refusal is hidden in weak copy.",
-        original: "Yes, add travel insurance to my booking",
-        cure: "Do not pre-select optional paid services. Present both choices equally and let users actively opt in.",
-        curedHtml: `
-          <h3>Travel Insurance</h3>
-          <p>Would you like to add travel insurance?</p>
-          <div class="choice-row">
-            <label><input type="checkbox"> Yes, add insurance for €18.99</label>
-            <label><input type="checkbox"> No, continue without insurance</label>
-          </div>
-        `,
-        explanation: "Optional paid services should require active consent instead of being selected by default.",
-        typeOptions: ["Preselection / Default Bias", "Scarcity", "Forced Continuity", "Hidden Costs"],
-        correctTool: "syringe",
-        toolTips: {
-          scalpel: "Delete the manipulative hidden refusal copy, but deleting alone does not fix the unfair default state.",
-          syringe: "Change the choice design: do not pre-select optional paid services, and present both choices equally.",
-          magnifier: "Making the small refusal link larger helps visibility, but the paid option is still selected by default."
-        },
-        lesson: "Consent should be active, informed, and easy to refuse."
-      },
-      seat: {
-        title: "Seat Selection",
-        type: "Confirmshaming",
-        symptom: "The refusal copy shames the user for declining a paid or optional choice.",
-        original: "No thanks, I don’t care where I sit",
-        cure: "Use neutral language for refusal options. Do not shame users for declining an offer.",
-        curedHtml: `
-          <h3>Seat Selection</h3>
-          <p>Would you like to choose your seat?</p>
-          <div class="balanced-buttons">
-            <button>Choose seat</button>
-            <button>Skip seat selection</button>
-          </div>
-        `,
-        explanation: "Refusal should be neutral. Ethical design respects the user's choice without guilt or pressure.",
-        typeOptions: ["Confirmshaming", "Roach Motel", "Misdirection", "Nagging"],
-        correctTool: "syringe",
-        toolTips: {
-          scalpel: "Removing the refusal option would make the flow less ethical, not more.",
-          syringe: "Rewrite the refusal copy with neutral language: use 'Skip seat selection' instead of shame-based wording.",
-          magnifier: "Making the refusal text larger does not remove the guilt or pressure from the wording."
-        },
-        lesson: "Neutral language protects user dignity and autonomy."
-      },
-      costs: {
-        title: "Final Payment",
-        type: "Hidden Costs",
-        symptom: "Mandatory fees appear late, after the user has already invested time in the booking flow.",
-        original: "Service Fee: €12.50 and Payment Processing Fee: €5.00 appear at the end.",
-        cure: "Show all mandatory fees early and clearly before users invest time in the checkout process.",
-        curedHtml: `
-          <div class="price-row"><span>Flight price</span><strong>€49.99</strong></div>
-          <div class="price-row"><span>Service fee</span><strong>€12.50</strong></div>
-          <div class="price-row"><span>Payment fee</span><strong>€5.00</strong></div>
-          <p class="final-total" style="color: var(--cure-green)">Total today: €67.49</p>
-        `,
-        explanation: "Users need full pricing information before they commit time and attention.",
-        typeOptions: ["Hidden Costs", "Scarcity", "Preselection", "Social Proof"],
-        correctTool: "magnifier",
-        toolTips: {
-          scalpel: "Deleting mandatory fees from the display would hide information even more.",
-          syringe: "Renaming fees is not enough if the costs still appear too late.",
-          magnifier: "Reveal all mandatory fees early and clearly before users invest time in checkout."
-        },
-        lesson: "Transparent pricing prevents surprise and builds trust."
-      },
-      baggage: {
-        title: "Extra Baggage",
-        type: "Misdirection / Visual Hierarchy Manipulation",
-        symptom: "The upgrade button is visually dominant, while the skip option is tiny and pale.",
-        original: "Yes, upgrade my trip is bold and red; skip for now is small and faint.",
-        cure: "Make accept and decline options visually balanced, clear, and equally accessible.",
-        curedHtml: `
-          <h3>Extra Baggage</h3>
-          <p>Would you like to add priority boarding and cabin bag?</p>
-          <div class="balanced-buttons">
-            <button>Add upgrade</button>
-            <button>Continue without upgrade</button>
-          </div>
-        `,
-        explanation: "Visual hierarchy should clarify choices, not steer users away from declining.",
-        typeOptions: ["Misdirection / Visual Hierarchy Manipulation", "Forced Action", "Sneaking", "Scarcity"],
-        correctTool: "syringe",
-        toolTips: {
-          scalpel: "Deleting one option would reduce user control instead of balancing the choice.",
-          syringe: "Adjust the visual hierarchy: make accept and decline options balanced, clear, and equally accessible.",
-          magnifier: "Enlarging only the skip link helps a little, but the whole visual hierarchy needs treatment."
-        },
-        lesson: "Balanced choices make both paths equally reachable."
-      },
-      urgency: {
-        title: "Urgency Banner",
-        type: "False Urgency / Scarcity Pressure",
-        symptom: "A countdown and low-seat warning create pressure without verifiable inventory.",
-        original: "Only 2 seats left at this price! Offer expires in 04:59.",
-        cure: "Only show urgency messages when they are accurate, verifiable, and relevant to the user’s decision.",
-        curedHtml: `
-          <strong>Current fare: €49.99</strong>
-          <span>Prices may change depending on availability.</span>
-        `,
-        explanation: "Urgency should inform the user, not manufacture panic.",
-        typeOptions: ["False Urgency / Scarcity Pressure", "Hidden Subscription", "Obstruction", "Confirmshaming"],
-        correctTool: "scalpel",
-        toolTips: {
-          scalpel: "Remove fake countdowns and unverifiable scarcity claims; only keep urgency when it is accurate and relevant.",
-          syringe: "Changing the color or wording does not solve the fake pressure if the claim is still untrue.",
-          magnifier: "Making the countdown more visible would intensify the pressure instead of curing it."
-        },
-        lesson: "Honest urgency avoids fake countdowns and pressure tactics."
-      }
-    };
+    const researchNotes = [
+      { id: "deceptive", title: "Deceptive Design Pattern Library", shortText: "Common labels such as Confirmshaming, Hidden Costs, Preselection, and Hard to Cancel.", sourceName: "Brignull / Deceptive Design", sourceUrl: "https://www.deceptive.design/types", priority: "low" },
+      { id: "gray", title: "Ontology of Dark Patterns", shortText: "High level strategies include Nagging, Obstruction, Sneaking, Interface Interference, and Forced Action.", sourceName: "Gray et al.", sourceUrl: "https://colingray.me/wp-content/uploads/2024/02/2024_Grayetal_CHI_OntologyDarkPatterns.pdf", priority: "low" },
+      { id: "mathur", title: "Dark Patterns at Scale", shortText: "Retail patterns commonly use urgency, scarcity, social proof, and hidden costs.", sourceName: "Mathur et al.", sourceUrl: "https://arxiv.org/pdf/1907.07032", priority: "low" },
+      { id: "oecd", title: "Dark Commercial Patterns", shortText: "Consumer harm can include financial loss, privacy loss, and impaired autonomy.", sourceName: "OECD", sourceUrl: "https://www.oecd.org/content/dam/oecd/en/publications/reports/2022/10/dark-commercial-patterns_9f6169cd/44f5e846-en.pdf", priority: "low" },
+      { id: "ftc", title: "FTC Dark Patterns Report", shortText: "Regulatory examples cover subscriptions, hidden fees, and cancellation barriers.", sourceName: "FTC", sourceUrl: "https://www.ftc.gov/news-events/news/press-releases/2022/09/ftc-report-shows-rise-sophisticated-dark-patterns-designed-trick-trap-consumers", priority: "low" },
+      { id: "edpb", title: "Social Media Guidelines", shortText: "Privacy maze, continuous prompting, and language discontinuity appear across social media lifecycles.", sourceName: "EDPB", sourceUrl: "https://www.edpb.europa.eu/system/files/2022-03/edpb_03-2022_guidelines_on_dark_patterns_in_social_media_platform_interfaces_en.pdf", priority: "low" },
+      { id: "nng", title: "Deceptive Patterns UX Walkthrough", shortText: "Teaching-focused walkthroughs help connect symptoms to design repair.", sourceName: "NNG", sourceUrl: "https://www.nngroup.com/articles/deceptive-patterns/", priority: "low" }
+    ];
 
-    const state = {
-      messageIndex: 0,
-      currentPattern: null,
-      selectedType: "",
-      selectedCure: "",
-      trust: 100,
-      score: 0,
-      attempts: {},
-      pendingAwarded: {},
-      cured: {}
-    };
-
-    const chat = document.getElementById("chat");
-    const continueBtn = document.getElementById("continueBtn");
-    const acceptBtn = document.getElementById("acceptBtn");
-    const doctorPanel = document.getElementById("doctorPanel");
-    const progressText = document.getElementById("progressText");
-    const trustText = document.getElementById("trustText");
-    const trustFill = document.getElementById("trustFill");
-    const hintText = document.getElementById("hintText");
-
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
+    function p(id, pageId, patternName, category, difficulty, symptomText, whyItIsDark, userHarm, correctRepair, wrongRepairs, hint, refs) {
+      return { id, pageId, patternName, category, difficulty, targetSelector: `[data-pattern="${id}"]`, symptomText, whyItIsDark, userHarm, correctRepair, wrongRepairs, hint, researchRefIds: refs };
     }
 
-    function addNextMessage() {
-      if (state.messageIndex >= messages.length) return;
-      const message = messages[state.messageIndex];
+    function page(id, title, type, lead, cards) {
+      return { id, title, type, lead, cards };
+    }
+
+    const scenarios = [
+      {
+        id: "flight",
+        title: "FlyFast Airlines",
+        subtitle: "Complete Your Booking",
+        difficulty: "Easy",
+        caseBrief: "A low-cost airline flow nudges users through pressure, defaults, hidden fees, and hard-to-change add-ons.",
+        visualTheme: "Airline booking slice",
+        pages: [
+          page("search", "Flight Search", "landing", "The patient website begins with a fare search and a pulse of time pressure.", ["London to Lisbon", "Base fare from EUR 49.99", "Flexible date search"]),
+          page("results", "Flight Results", "listing", "Multiple fares appear, each framed as almost gone.", ["Fare cards", "Countdown banner", "Almost sold out badges"]),
+          page("details", "Flight Detail", "detail", "The selected fare now grows through seats, bags, and priority services.", ["Seat preview", "Fare bundle comparison", "Priority boarding block"]),
+          page("passenger", "Passenger Info", "form", "Passenger details appear ordinary, but change links begin to disappear.", ["Passenger form", "Contact details", "Trip summary"]),
+          page("addons", "Seat, Baggage & Insurance", "modal", "Add-ons are inserted through modals and preselected choices.", ["Seat selection modal", "Baggage add-on", "Insurance pop-up"]),
+          page("payment", "Payment", "payment", "The final total changes after the user reaches payment.", ["Payment method", "Fee breakdown", "Confirm booking"]),
+          page("summary", "Booking Summary", "summary", "The cured flow should make changes and refusals visible.", ["Final itinerary", "Edit links", "Receipt"])
+        ],
+        patterns: [
+          p("F1", "results", "Fake Urgency", "Urgency", "obvious", "A countdown claims the fare expires soon and resets after refresh.", "The timer manufactures pressure instead of informing the user.", "It pressures users with unverifiable claims.", "Only show real deadlines tied to verifiable fare rules.", ["Make the timer larger.", "Hide the timer in a tooltip."], "Does the deadline persist, or does it restart?", ["deceptive", "mathur"]),
+          p("F2", "results", "Fake Scarcity", "Scarcity", "obvious", "Several flights all say Almost sold out without inventory evidence.", "Scarcity claims are repeated and unverifiable.", "It pressures users with unverifiable claims.", "Remove unverifiable inventory labels or show the source and freshness.", ["Use brighter red labels.", "Move scarcity into the page title."], "Can the user verify this stock claim?", ["mathur"]),
+          p("F3", "addons", "Preselected Insurance", "Preselection", "obvious", "Travel insurance is checked by default.", "Optional paid services should require active consent.", "It hides key information.", "Default optional paid services to off and present both choices equally.", ["Keep it checked but add small print.", "Put refusal below the fold."], "Was this added by the user or by the interface?", ["deceptive"]),
+          p("F4", "payment", "Hidden Costs", "Hidden Costs", "medium", "Service and payment fees appear only at the final payment step.", "Mandatory fees are delayed until after the user has invested effort.", "It hides key information.", "Disclose full mandatory costs from results and cart summaries onward.", ["Rename the fees.", "Show fees after card entry."], "When did the user first learn the real total?", ["deceptive", "ftc"]),
+          p("F5", "addons", "Confirmshaming", "Confirmshaming", "obvious", "The insurance refusal says No, I prefer to travel unprotected.", "The refusal judges the user instead of describing the action.", "It makes refusal emotionally difficult.", "Use neutral refusal copy such as No thanks or Continue without insurance.", ["Remove the refusal button.", "Make the shame copy smaller."], "Is the button describing an action or judging the user?", ["deceptive"]),
+          p("F6", "details", "Visual Interference", "Interface Interference", "medium", "Paid seats are bright and free random seats are a faint text link.", "Visual hierarchy steers users toward the paid option.", "It makes comparison or reversal harder.", "Present paid and free seating choices with balanced visibility and clear differences.", ["Hide random seating.", "Mark all free seats as risky."], "Which option is easiest to see?", ["gray", "nng"]),
+          p("F7", "addons", "Sneak into Basket", "Sneaking", "medium", "Priority boarding is inserted into the basket automatically.", "The basket changes without an active user choice.", "It hides key information.", "Add extras only after explicit opt-in.", ["Mention it in small text.", "Preselect it but make it cheaper."], "Did the user click to add this service?", ["gray", "deceptive"]),
+          p("F8", "summary", "Hard to Change", "Obstruction", "subtle", "Changing flight or baggage is buried behind multiple summary menus.", "Reversal is harder than purchase.", "It adds unnecessary steps.", "Provide direct edit links beside each summary item.", ["Only allow support chat changes.", "Add another confirmation page."], "How many steps does undoing the choice take?", ["gray", "ftc"])
+        ]
+      },
+      {
+        id: "ecommerce",
+        title: "Everyday Market",
+        subtitle: "Household Goods Checkout",
+        difficulty: "Easy to Medium",
+        caseBrief: "An online shop uses coupon pressure, default add-ons, comparison blockers, and late fees.",
+        visualTheme: "Retail checkout slice",
+        pages: [
+          page("home", "Search Results", "listing", "Product cards and filters look helpful, but comparison is strained.", ["Product cards", "Filters", "Compare buttons"]),
+          page("detail", "Product Detail", "detail", "Stock and viewers are used as pressure signals.", ["Product image", "Inventory label", "Reviews"]),
+          page("coupon", "Coupon Modal", "modal", "A coupon pop-up interrupts shopping with loaded refusal copy.", ["Email field", "Timer", "Decline link"]),
+          page("compare", "Comparison Drawer", "drawer", "Bundles are named differently, and unit prices are absent.", ["Bundle table", "SKU names", "Hidden unit price"]),
+          page("cart", "Cart", "cart", "The basket contains more than the user added.", ["Cart rows", "Donation line", "Coupon code"]),
+          page("delivery", "Delivery & Add-ons", "form", "Delivery choices and optional services are weighted unevenly.", ["Shipping cards", "Insurance checkbox", "SMS notification"]),
+          page("payment", "Payment", "payment", "The final payment screen adds a platform fee.", ["Fee summary", "Payment method", "Submit order"]),
+          page("order", "Order Detail", "settings", "Preference and return settings are hard to adjust.", ["Order receipt", "Returns", "Marketing preferences"])
+        ],
+        patterns: [
+          p("E1", "coupon", "Confirmshaming Coupon", "Confirmshaming", "obvious", "The refusal says No, I want to pay full price.", "The copy shames the user for declining a marketing request.", "It makes refusal emotionally difficult.", "Use neutral copy such as Not now or Continue without coupon.", ["Make the refusal link gray.", "Ask for email before showing refusal."], "Is refusal neutral or emotionally loaded?", ["deceptive"]),
+          p("E2", "detail", "Fake Urgency", "Urgency", "obvious", "A timer says order within 15 minutes or the price rises.", "The timer creates unverified pressure.", "It pressures users with unverifiable claims.", "Show only real promotion end times that do not reset.", ["Restart the timer at checkout.", "Add louder warning copy."], "Does the timer represent a real promotion?", ["mathur"]),
+          p("E3", "detail", "Fake Scarcity", "Scarcity", "medium", "Only 2 left and 34 people viewing stay constant.", "Stock and viewer counts are used without evidence.", "It pressures users with unverifiable claims.", "Remove fake stock claims or disclose source and update time.", ["Add a red icon.", "Hide it under reviews."], "Could this number be audited?", ["mathur", "oecd"]),
+          p("E4", "cart", "Sneak into Basket", "Sneaking", "medium", "Eco packaging and a donation are automatically added.", "The basket changes without user intent.", "It hides key information.", "Optional add-ons should start unchecked and be added only by active opt-in.", ["Make the add-on cheaper.", "Explain it after payment."], "Who added this line item?", ["gray"]),
+          p("E5", "delivery", "Preselected Add-ons", "Preselection", "obvious", "Shipping insurance, SMS alerts, and marketing signup are checked by default.", "Defaults favor the platform and create passive consent.", "It collects unnecessary data.", "Default optional services to off and let users actively choose.", ["Keep marketing checked.", "Hide settings in order detail."], "Which boxes are checked before the user acts?", ["deceptive", "oecd"]),
+          p("E6", "payment", "Hidden Platform Fee", "Hidden Costs", "medium", "A service fee appears only on the payment page.", "Mandatory costs are delayed.", "It hides key information.", "Show complete total, including platform fees, in the cart.", ["Rename it convenience support.", "Show it only after card entry."], "When is the first complete price shown?", ["ftc"]),
+          p("E7", "delivery", "Delivery Visual Interference", "Interface Interference", "medium", "Express delivery is a large green button, standard delivery is gray text.", "Visual weight steers the user toward the expensive option.", "It makes comparison or reversal harder.", "Display delivery options as equal cards with price and timing.", ["Hide standard delivery.", "Preselect express delivery."], "Which delivery choice looks like the primary action?", ["gray", "nng"]),
+          p("E8", "compare", "Comparison Prevention", "Comparison Prevention", "subtle", "Bundles use inconsistent names and omit unit price.", "The interface prevents fair comparison.", "It makes comparison or reversal harder.", "Show unit prices and a unified comparison table.", ["Add more bundle names.", "Move unit price to FAQ."], "Can the user compare the same unit across options?", ["mathur"])
+        ]
+      },
+      {
+        id: "subscription",
+        title: "FitStream Club",
+        subtitle: "Trial and Billing Flow",
+        difficulty: "Medium",
+        caseBrief: "A fitness subscription makes trial signup easy and cancellation slow, emotional, and asymmetric.",
+        visualTheme: "Subscription billing slice",
+        pages: [
+          page("landing", "Landing Page", "landing", "The service advertises a free trial and personalized plan.", ["Hero CTA", "Trial banner", "Course cards"]),
+          page("preview", "Course Preview", "detail", "A course preview interrupts users with signup requests.", ["Locked schedule", "Preview clips", "Trial prompt"]),
+          page("plans", "Plan Comparison", "listing", "Monthly language hides annual billing reality.", ["Plan cards", "Savings claim", "Reference price"]),
+          page("register", "Register Modal", "modal", "Registration appears before basic details are visible.", ["Email form", "Password field", "Continue CTA"]),
+          page("trial", "Free Trial Payment", "payment", "Free trial payment hides renewal terms.", ["Card form", "Trial copy", "Terms link"]),
+          page("home", "Content Home", "landing", "Post-signup content creates new add-on offers.", ["Course grid", "Trial nag", "Premium badge"]),
+          page("coins", "Coin Store", "cart", "FitCoins replace real price clarity.", ["Coin packs", "Bonus labels", "Class upgrade"]),
+          page("billing", "Billing Settings", "settings", "Cancellation is routed through multiple steps.", ["Billing summary", "Cancel link", "Retention offer"])
+        ],
+        patterns: [
+          p("S1", "preview", "Trial Nagging", "Nagging", "obvious", "The free trial prompt repeats after the user closes it.", "Repeated interruption ignores refusal.", "It adds unnecessary steps.", "Limit prompt frequency and respect a clear dismissal.", ["Make the prompt full screen.", "Show it after every click."], "How many times is the same request repeated?", ["gray"]),
+          p("S2", "preview", "Forced Registration", "Forced Action", "medium", "Users must register before viewing the full course schedule.", "Registration is not necessary for browsing basic information.", "It collects unnecessary data.", "Allow guest access to basic course information.", ["Ask for phone number too.", "Hide all course names."], "Is registration needed for this task?", ["gray", "oecd"]),
+          p("S3", "plans", "Misleading Reference Pricing", "Interface Interference", "medium", "Annual billing is framed as only CNY 29 per month while CNY 348 is weak.", "The actual charge is visually downgraded.", "It hides key information.", "Show monthly equivalent and actual upfront charge with equal prominence.", ["Show only monthly equivalent.", "Put total charge in terms."], "What amount is actually charged today?", ["oecd", "ftc"]),
+          p("S4", "trial", "Hidden Subscription", "Hidden Subscription", "medium", "Auto-renewal terms are buried in tiny agreement text.", "Users may not understand when and how much they will be charged.", "It hides key information.", "Display renewal date and amount beside the trial CTA.", ["Keep it in terms.", "Reveal after card entry."], "Where is the renewal rule stated?", ["ftc"]),
+          p("S5", "home", "Bait and Switch", "Bait and Switch", "medium", "The plan promises unlimited access but many courses require extra purchase.", "The delivered service differs from the promise.", "It hides key information.", "Clearly separate included content from paid add-ons before signup.", ["Add a Premium tag after signup only.", "Use vague plan labels."], "Did the promise match the post-signup reality?", ["oecd"]),
+          p("S6", "coins", "Intermediate Currency", "Interface Interference", "subtle", "Classes are priced in FitCoins, making real price hard to calculate.", "Intermediate currency increases price comprehension cost.", "It makes comparison or reversal harder.", "Show real currency price beside FitCoins.", ["Add bigger coin bundles.", "Hide exchange rate in FAQ."], "Can the user see the real money cost?", ["oecd"]),
+          p("S7", "billing", "Emotional Cancellation Copy", "Emotional Steering", "obvious", "The flow asks if the user really wants to abandon their streak.", "Guilt is used to block cancellation.", "It makes refusal emotionally difficult.", "Use neutral cancellation consequences and let the user proceed.", ["Add sad illustrations.", "Ask three guilt questions."], "Is the copy informational or guilt-based?", ["deceptive"]),
+          p("S8", "billing", "Hard to Cancel", "Hard to Cancel", "subtle", "Cancellation requires survey, pause offer, discount, and email confirmation.", "Cancellation is much harder than signup.", "It adds unnecessary steps.", "Provide direct cancellation with immediate confirmation.", ["Add another retention offer.", "Require support call."], "Compare signup steps to cancellation steps.", ["ftc", "gray"])
+        ]
+      },
+      {
+        id: "social",
+        title: "LoopLink Social",
+        subtitle: "Registration and Privacy Flow",
+        difficulty: "Medium to Hard",
+        caseBrief: "A social platform collects extra data through contact sync, privacy defaults, repeated prompts, and deletion friction.",
+        visualTheme: "Social signup slice",
+        pages: [
+          page("landing", "Landing Page", "landing", "The platform promises fast signup and community discovery.", ["Sign up CTA", "Trending feed", "Premium verification"]),
+          page("signup", "Sign Up", "form", "The first form asks for more data than needed.", ["Email", "Phone", "Birthday"]),
+          page("verify", "Verification Modal", "modal", "Phone verification returns after dismissal.", ["Phone field", "Skip link", "Security claim"]),
+          page("profile", "Profile Completion", "form", "Profile fields are framed as mandatory.", ["Birthday", "Region", "Phone number"]),
+          page("contacts", "Contact Sync Modal", "modal", "Contact sync is dominant, skipping is faint.", ["Sync button", "Later link", "Permission copy"]),
+          page("privacy", "Privacy Settings", "settings", "Privacy defaults favor public sharing and advertising.", ["Public account", "Discoverable phone", "Personalized ads"]),
+          page("feed", "Feed Home", "landing", "Invite prompts and premium verification appear in feed.", ["Invite banner", "Locked feature", "Ad card"]),
+          page("account", "Account Center", "settings", "Ads and deletion controls are buried and inconsistent.", ["Ad preferences", "Data rights", "Delete account"])
+        ],
+        patterns: [
+          p("M1", "contacts", "Hidden in Plain Sight", "Interface Interference", "medium", "Sync contacts is a large button while Later is tiny gray text.", "The refusal path is technically present but visually suppressed.", "It makes comparison or reversal harder.", "Make Sync and Skip equally visible and clear.", ["Remove the skip option.", "Make sync brighter."], "Can the user realistically see the refusal path?", ["edpb", "nng"]),
+          p("M2", "verify", "Continuous Prompting", "Nagging", "medium", "Phone and contact prompts return after the user rejects them.", "The interface does not respect refusal.", "It adds unnecessary steps.", "Remember refusal and stop repeated prompts unless context changes.", ["Ask every session.", "Move prompt into a modal."], "What happens after the user says no?", ["edpb", "gray"]),
+          p("M3", "profile", "Forced Disclosure", "Forced Action", "medium", "Birthday, region, and phone are marked required for account setup.", "Non-essential data is treated as mandatory.", "It collects unnecessary data.", "Make non-essential profile data optional and explain why it is requested.", ["Hide why fields are needed.", "Add more required fields."], "Is this data necessary for core signup?", ["edpb", "oecd"]),
+          p("M4", "privacy", "Privacy-Unfriendly Defaults", "Preselection", "subtle", "Public account, phone discovery, and personalized ads are on by default.", "Defaults push privacy loss without active consent.", "It collects unnecessary data.", "Use privacy-protective defaults and active opt-in for discovery and ads.", ["Keep defaults public.", "Put privacy in account center only."], "What happens if the user just continues?", ["edpb"]),
+          p("M5", "contacts", "Address Book Leeching", "Privacy", "hard", "The copy says sync contacts but permits long-term storage of relationships.", "Permission scope and retention are unclear.", "It collects unnecessary data.", "Explain scope, retention, and withdrawal; support local matching where possible.", ["Use vague permission text.", "Store contacts without notice."], "What exactly is uploaded and kept?", ["edpb"]),
+          p("M6", "feed", "Friend Spam", "Social Proof", "medium", "Inviting five friends unlocks a core feature.", "The user is turned into an acquisition channel.", "It pressures users with unverifiable claims.", "Make invites optional rewards, not gates to core features.", ["Require ten invites.", "Hide the locked feature reason."], "Is a core task blocked by recruiting others?", ["oecd"]),
+          p("M7", "account", "Privacy Maze", "Obstruction", "subtle", "Turning off personalized ads requires multiple nested screens.", "Opt-out is much harder than opt-in.", "It adds unnecessary steps.", "Provide direct ad preference controls on the privacy page.", ["Add more menus.", "Use a support article only."], "Is turning off as easy as turning on?", ["edpb", "gray"]),
+          p("M8", "account", "Language Discontinuity", "Obstruction", "hard", "Deletion suddenly switches to English legal terminology.", "Critical consequences are unclear and inconsistent.", "It hides key information.", "Use the same language and clear consequences throughout deletion.", ["Add more legal terms.", "Move consequences into PDF."], "Did the language change at the critical step?", ["edpb"])
+        ]
+      },
+      {
+        id: "health",
+        title: "CareNow Clinic",
+        subtitle: "Online Appointment Flow",
+        difficulty: "Hard",
+        caseBrief: "A sensitive healthcare appointment flow combines emotional steering, bundled consent, hidden information, and rights obstruction.",
+        visualTheme: "Healthcare appointment slice",
+        pages: [
+          page("search", "Doctor Search", "listing", "Users search departments and doctors before registering.", ["Departments", "Doctor cards", "Price hidden"]),
+          page("triage", "Symptom Triage", "form", "The questionnaire begins with a chosen basic consult.", ["Symptoms", "Severity", "Recommendation"]),
+          page("register", "Register Login", "form", "Full slots and prices are blocked by registration.", ["Login prompt", "Identity form", "Insurance note"]),
+          page("slots", "Slot Selection", "listing", "Premium appointments are framed through social proof.", ["Time slots", "VIP banner", "Wait time"]),
+          page("patient", "Patient Info and Insurance", "form", "Coverage and fees are pushed into folded details.", ["Insurance", "Patient details", "Coverage drawer"]),
+          page("upgrade", "Urgent Upgrade Modal", "modal", "The urgent upgrade uses fear-based refusal copy.", ["Upgrade CTA", "Risk refusal", "Extra test"]),
+          page("consent", "Consent and Data Sharing", "form", "Multiple permissions are bundled into one checkbox.", ["Consent checkbox", "Research use", "Partner sharing"]),
+          page("payment", "Payment and Portal", "payment", "Withdrawal and record controls do not close the loop.", ["Payment total", "Portal settings", "FAQ dead end"])
+        ],
+        patterns: [
+          p("H1", "upgrade", "Fear-Based Refusal", "Emotional Steering", "obvious", "The refusal says I accept the risk of delayed care.", "Fear makes a normal option feel irresponsible.", "It makes refusal emotionally difficult.", "Use neutral wording that explains standard and urgent differences.", ["Use stronger fear copy.", "Hide standard care."], "Is the user being informed or frightened?", ["deceptive", "oecd"]),
+          p("H2", "slots", "Fake Social Proof", "Social Proof", "medium", "91% of similar patients chose premium care appears without source.", "The statistic is unverifiable in a sensitive context.", "It pressures users with unverifiable claims.", "Remove unsourced statistics or provide real source and relevance.", ["Add a badge with no source.", "Make the statistic larger."], "Where does this percentage come from?", ["mathur", "oecd"]),
+          p("H3", "register", "Forced Registration", "Forced Action", "medium", "Users must register before viewing complete slots and prices.", "Browsing basic care information should not require account creation.", "It collects unnecessary data.", "Allow users to view basic availability and prices before registration.", ["Require ID before browsing.", "Hide doctor names too."], "Is registration necessary before comparing care?", ["gray", "oecd"]),
+          p("H4", "patient", "Hidden Coverage Information", "Hidden Costs", "hard", "Insurance exclusions and service fees sit inside a folded disclosure.", "Critical cost and coverage information is low visibility.", "It hides key information.", "Show exclusions and fees in the main payment summary before confirmation.", ["Keep details folded.", "Show after booking."], "Is the key risk visible without opening a drawer?", ["ftc", "oecd"]),
+          p("H5", "consent", "Bundled Consent", "Privacy", "hard", "Treatment consent, research use, partner sharing, and marketing are one checkbox.", "Required and optional permissions are bundled.", "It collects unnecessary data.", "Use granular consent with separate required and optional choices.", ["Keep one checkbox.", "Put optional sharing in terms."], "Can the user accept care without optional sharing?", ["edpb"]),
+          p("H6", "triage", "Bait and Switch", "Bait and Switch", "medium", "The selected basic consult is automatically replaced by expert video consult.", "Recommendation becomes automatic replacement.", "It hides key information.", "Show recommendation without changing the user's selected service automatically.", ["Auto-upgrade silently.", "Hide the original service."], "Did the service change without confirmation?", ["oecd"]),
+          p("H7", "consent", "Trick Wording", "Privacy", "hard", "Data sharing is explained with double negatives and vague partner terms.", "Users cannot understand data, recipient, purpose, and consequence.", "It hides key information.", "Use clear four-part consent: data, recipient, purpose, consequence.", ["Use more legal jargon.", "Move explanation to FAQ."], "Can a user restate who gets what data and why?", ["edpb"]),
+          p("H8", "payment", "Rights Obstruction", "Obstruction", "hard", "Authorization withdrawal sends users to FAQ or phone support with no online completion.", "The rights path is a dead end.", "It adds unnecessary steps.", "Provide in-product withdrawal with status confirmation.", ["Offer only a phone number.", "Use a broken FAQ link."], "Can the user complete the right request here?", ["edpb", "gray"])
+        ]
+      }
+    ];
+
+    const state = {
+      introIndex: 0,
+      screen: "intro",
+      scenarioId: "",
+      pageId: "",
+      inspect: true,
+      selectedPatternId: "",
+      selectedType: "",
+      selectedHarm: "",
+      selectedRepair: "",
+      feedback: "",
+      hintsLeft: 3,
+      progress: {}
+    };
+
+    const introMessages = [
+      { from: "client", text: "Hi Doctor, the internet has more sick interfaces than we can triage." },
+      { from: "doctor", text: "Send the files to Website Clinic. I will inspect the flows." },
+      { from: "client", text: "There are travel, shopping, subscription, social, and healthcare cases." },
+      { from: "doctor", text: "I will identify the deceptive patterns, collect evidence, and prescribe ethical repairs." },
+      { from: "client", text: "Please keep the research notes low priority. The game should stay playable." }
+    ];
+
+    const el = id => document.getElementById(id);
+    const currentScenario = () => scenarios.find(s => s.id === state.scenarioId);
+    const progressFor = id => state.progress[id] || (state.progress[id] = { found: {}, repaired: {}, attempts: {}, score: 0, visited: {} });
+    const currentProgress = () => progressFor(state.scenarioId);
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(node => node.classList.remove("active"));
+      el(id).classList.add("active");
+      state.screen = id;
+    }
+
+    function addIntro() {
+      if (state.introIndex >= introMessages.length) return;
+      const message = introMessages[state.introIndex++];
       const bubble = document.createElement("div");
       bubble.className = `bubble ${message.from}`;
       bubble.textContent = message.text;
-      chat.appendChild(bubble);
-      chat.scrollTop = chat.scrollHeight;
-      state.messageIndex += 1;
-
-      if (state.messageIndex === messages.length) {
-        continueBtn.hidden = true;
-        acceptBtn.hidden = false;
+      el("chat").appendChild(bubble);
+      if (state.introIndex === introMessages.length) {
+        el("continueIntro").hidden = true;
+        el("openCases").hidden = false;
       }
     }
 
-    function updateStatus() {
-      const curedCount = Object.keys(state.cured).length;
-      progressText.textContent = `${curedCount} / ${Object.keys(patterns).length}`;
-      trustText.textContent = `${state.trust}%`;
-      trustFill.style.width = `${state.trust}%`;
-    }
-
-    function openDiagnosis(id) {
-      if (state.cured[id]) {
-        hintText.textContent = "This area is already cured. Keep scanning for untreated symptoms.";
-        return;
-      }
-
-      state.currentPattern = id;
-      state.selectedType = "";
-      state.selectedCure = "";
-      state.attempts[id] = state.attempts[id] || 0;
-
-      document.querySelectorAll(".hotspot").forEach(node => node.classList.remove("selected"));
-      document.querySelectorAll(`[data-pattern="${id}"]`).forEach(node => node.classList.add("selected"));
-
-      const pattern = patterns[id];
-      doctorPanel.innerHTML = `
-        <div class="diagnosis-card">
-          <h2>Symptom Detected</h2>
-          <p>${pattern.symptom}</p>
-          <div class="question">
-            <strong>What type of Dark Pattern is this?</strong>
-            <div id="typeOptions">${renderOptions(pattern.typeOptions, "type")}</div>
-          </div>
-          <div class="question">
-            <strong>How should we cure it?</strong>
-            <div id="cureOptions">${renderToolOptions(pattern)}</div>
-          </div>
-          <div class="panel-actions">
-            <button class="primary" id="submitDiagnosis">Submit Diagnosis</button>
-          </div>
-          <div id="feedbackSlot"></div>
-        </div>
-      `;
-      doctorPanel.querySelectorAll("[data-choice]").forEach(button => {
-        button.addEventListener("click", () => chooseOption(button));
-      });
-      document.getElementById("submitDiagnosis").addEventListener("click", submitDiagnosis);
-      hintText.textContent = "Choose both the diagnosis and the ethical cure, then submit.";
-    }
-
-    function renderOptions(options, kind) {
-      return options.map(option => `<button class="option" data-choice="${kind}" data-value="${escapeAttribute(option)}">${option}</button>`).join("");
-    }
-
-    function renderToolOptions(pattern) {
-      return cureTools.map(tool => {
-        const tooltip = pattern.toolTips?.[tool.id] || tool.fallback;
+    function renderCases() {
+      el("caseGrid").innerHTML = scenarios.map((scenario, index) => {
+        const progress = progressFor(scenario.id);
+        const repaired = Object.keys(progress.repaired).length;
+        const total = scenario.patterns.length;
+        const pct = Math.round(repaired / total * 100);
+        const risk = scenario.difficulty.includes("Hard") ? "red" : scenario.difficulty.includes("Medium") ? "yellow" : "green";
         return `
-          <button class="option tool-option" data-choice="cure" data-value="${tool.id}" data-tooltip="${escapeAttribute(tooltip)}" title="${escapeAttribute(tooltip)}">
-            <span class="tool-icon">${tool.icon}</span>
-            <span class="tool-copy">
-              <strong>${tool.name}</strong>
-              <span>${tool.label}</span>
-            </span>
+          <button class="case-card" data-case="${scenario.id}">
+            <span class="kicker"><span class="status-dot"></span> Case #${String(index + 1).padStart(2, "0")}</span>
+            <h3>${scenario.title}</h3>
+            <p class="muted">${scenario.subtitle}</p>
+            <div class="case-meta">
+              <span class="chip ${risk}">${scenario.difficulty}</span>
+              <span class="chip blue">${scenario.pages.length} pages</span>
+              <span class="chip">${total} symptoms</span>
+            </div>
+            <p class="muted">${scenario.caseBrief}</p>
+            <div class="case-progress">
+              <div class="toolbar-line"><span>Completion</span><strong>${repaired} / ${total}</strong></div>
+              <div class="meter"><span style="width:${pct}%"></span></div>
+            </div>
           </button>
         `;
       }).join("");
+      document.querySelectorAll("[data-case]").forEach(button => button.addEventListener("click", () => startScenario(button.dataset.case)));
     }
 
-    function escapeAttribute(value) {
-      return value.replace(/"/g, "&quot;");
+    function startScenario(id) {
+      state.scenarioId = id;
+      const scenario = currentScenario();
+      const progress = currentProgress();
+      state.pageId = scenario.pages[0].id;
+      progress.visited[state.pageId] = true;
+      state.selectedPatternId = "";
+      state.feedback = "";
+      state.hintsLeft = 3;
+      renderGame();
+      showScreen("gameScreen");
     }
 
-    function chooseOption(button) {
-      const kind = button.dataset.choice;
-      const value = button.dataset.value;
-      state[kind === "type" ? "selectedType" : "selectedCure"] = value;
-      button.parentElement.querySelectorAll(".option").forEach(option => option.classList.remove("active"));
-      button.classList.add("active");
-    }
+    function renderGame() {
+      const scenario = currentScenario();
+      const pageData = scenario.pages.find(pg => pg.id === state.pageId);
+      const progress = currentProgress();
+      el("caseKicker").textContent = `Case ${scenario.id.toUpperCase()} / Risk ${scenario.difficulty}`;
+      el("caseTitle").textContent = scenario.title;
+      el("caseBrief").textContent = scenario.caseBrief;
 
-    function submitDiagnosis() {
-      const id = state.currentPattern;
-      const pattern = patterns[id];
-      const feedbackSlot = document.getElementById("feedbackSlot");
-
-      if (!state.selectedType || !state.selectedCure) {
-        feedbackSlot.innerHTML = `<div class="feedback warn"><h3>Missing evidence</h3><p>Please choose one diagnosis and one cure before submitting.</p></div>`;
-        return;
-      }
-
-      state.attempts[id] += 1;
-      const typeCorrect = state.selectedType === pattern.type;
-      const cureCorrect = state.selectedCure === pattern.correctTool;
-
-      if (typeCorrect && cureCorrect) {
-        const firstTry = state.attempts[id] === 1;
-        if (!state.cured[id] && !state.pendingAwarded[id]) {
-          state.score += 30 + (firstTry ? 5 : 0);
-          state.trust = Math.min(100, state.trust + 3);
-          state.pendingAwarded[id] = true;
-        }
-        document.getElementById("submitDiagnosis").disabled = true;
-        feedbackSlot.innerHTML = `
-          <div class="feedback correct">
-            <h3>Diagnosis Correct!</h3>
-            <p><strong>You found:</strong> ${pattern.type}</p>
-            <p><strong>Why it is harmful:</strong> ${pattern.explanation}</p>
-            <p><strong>Ethical cure:</strong> ${pattern.cure}</p>
-          </div>
-          <div class="panel-actions">
-            <button class="primary" id="applyCure">Apply Cure</button>
-          </div>
-        `;
-        document.getElementById("applyCure").addEventListener("click", applyCure);
-      } else if (typeCorrect) {
-        state.score = Math.max(0, state.score - 2);
-        state.trust = Math.max(0, state.trust - 4);
-        feedbackSlot.innerHTML = `
-          <div class="feedback warn">
-            <h3>Almost there.</h3>
-            <p>You identified the symptom correctly, but the treatment does not fully solve the problem.</p>
-            <p>Try choosing a fix that gives users clear, neutral, and equal choices.</p>
-          </div>
-        `;
-      } else {
-        state.score = Math.max(0, state.score - 2);
-        state.trust = Math.max(0, state.trust - 5);
-        feedbackSlot.innerHTML = `
-          <div class="feedback bad">
-            <h3>Not quite.</h3>
-            <p>Look at how this interface influences the user’s decision.</p>
-            <p>Is it hiding information, creating pressure, or making one option harder to choose?</p>
-          </div>
-        `;
-      }
-      updateStatus();
-    }
-
-    function applyCure() {
-      const id = state.currentPattern;
-      const pattern = patterns[id];
-      const nodes = document.querySelectorAll(`[data-pattern="${id}"]`);
-      nodes.forEach(node => {
-        node.innerHTML = pattern.curedHtml;
-        node.classList.add("cured", "cured-version");
-        node.classList.remove("selected");
-        node.setAttribute("aria-label", `${pattern.title} cured`);
-      });
-
-      state.cured[id] = true;
-      state.currentPattern = null;
-      doctorPanel.innerHTML = `
-        <div class="panel-empty">
+      const pagePatterns = scenario.patterns.filter(pattern => pattern.pageId === pageData.id);
+      el("gamePanel").innerHTML = `
+        <div class="case-header">
           <div>
-            <div class="scope">✓</div>
-            <h2>Cure applied</h2>
-            <p>${pattern.lesson}</p>
+            <span class="kicker"><span class="status-dot"></span>${scenario.visualTheme}</span>
+            <h2>${pageData.title}</h2>
+            <p class="muted">${pageData.lead}</p>
+          </div>
+          <span class="chip green">Step ${scenario.pages.findIndex(pg => pg.id === state.pageId) + 1} / ${scenario.pages.length}</span>
+        </div>
+        <nav class="page-nav">
+          ${scenario.pages.map(pg => `<button class="page-tab ${pg.id === state.pageId ? "active" : ""}" data-page="${pg.id}">${pg.title}</button>`).join("")}
+        </nav>
+        <section class="web-slice ${state.inspect ? "inspect-on" : ""}">
+          <div class="mock-top">
+            <strong>${scenario.title} - ${pageData.title}</strong>
+            <span class="chip ${pagePatterns.length ? "red" : "green"}">${pagePatterns.length ? `${pagePatterns.length} active symptoms` : "No active symptoms"}</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-row">
+              ${pageData.cards.map(card => `<div class="mock-card"><strong>${card}</strong><p class="muted">Simulated ${pageData.type} component under clinic observation.</p><div class="fake-ui"><span class="fake-button">Continue</span><span class="fake-button weak">More details</span></div></div>`).join("")}
+            </div>
+            <div class="mock-row">
+              ${pagePatterns.map(pattern => renderSymptomNode(pattern, progress)).join("")}
+              ${pagePatterns.length === 0 ? `<div class="mock-card dark"><h3>No obvious symptoms on this slice</h3><p>Use the page tabs to inspect other states in the web flow.</p></div>` : ""}
+            </div>
+          </div>
+        </section>
+      `;
+
+      document.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
+        state.pageId = button.dataset.page;
+        progress.visited[state.pageId] = true;
+        state.selectedPatternId = "";
+        state.feedback = "";
+        renderGame();
+      }));
+      document.querySelectorAll("[data-pattern]").forEach(node => node.addEventListener("click", () => openPattern(node.dataset.pattern)));
+      renderToolbar();
+      renderDiagnosis();
+    }
+
+    function renderSymptomNode(pattern, progress) {
+      const repaired = progress.repaired[pattern.id];
+      return `
+        <button class="symptom-node ${repaired ? "repaired" : ""}" data-pattern="${pattern.id}">
+          <span class="chip ${pattern.difficulty === "hard" || pattern.difficulty === "subtle" ? "yellow" : "red"}">${pattern.difficulty}</span>
+          <h3>${pattern.patternName}</h3>
+          <p>${repaired ? pattern.correctRepair : pattern.symptomText}</p>
+          <div class="fake-ui">
+            <span class="fake-button ${repaired ? "green" : "red"}">${repaired ? "Ethical state" : "Suspicious UI"}</span>
+            <span class="fake-button weak">${pattern.pageId}</span>
+          </div>
+        </button>
+      `;
+    }
+
+    function renderToolbar() {
+      const scenario = currentScenario();
+      const progress = currentProgress();
+      const found = Object.keys(progress.found).length;
+      const repaired = Object.keys(progress.repaired).length;
+      const pageNumber = scenario.pages.findIndex(pg => pg.id === state.pageId) + 1;
+      el("toolbar").innerHTML = `
+        <div class="tool-section">
+          <h3>Case Progress</h3>
+          <div class="toolbar-line"><span>Current flow</span><strong>Step ${pageNumber} / ${scenario.pages.length}</strong></div>
+          <div class="toolbar-line"><span>Found</span><strong>${found} / ${scenario.patterns.length}</strong></div>
+          <div class="toolbar-line"><span>Repaired</span><strong>${repaired} / ${scenario.patterns.length}</strong></div>
+          <div class="toolbar-line"><span>Difficulty</span><strong>${scenario.difficulty}</strong></div>
+          <div class="meter"><span style="width:${Math.round(repaired / scenario.patterns.length * 100)}%"></span></div>
+        </div>
+        <div class="tool-section">
+          <h3>Tools</h3>
+          <div class="switch"><span>Inspect Mode</span><button class="${state.inspect ? "on" : ""}" id="toggleInspect"><span></span></button></div>
+          <div class="fake-ui" style="margin-top:12px">
+            <button class="btn small" id="showEvidence">Evidence Log</button>
+            <button class="btn small" id="showRepairs">Repair Notes</button>
+            <button class="btn small" id="useHint">Hint (${state.hintsLeft})</button>
           </div>
         </div>
       `;
-      updateStatus();
-      const curedCount = Object.keys(state.cured).length;
-      hintText.textContent = curedCount === Object.keys(patterns).length
-        ? "All symptoms cured. Finish the diagnosis to review your report."
-        : "Good treatment. Keep scanning the booking page for the next symptom.";
+      el("toggleInspect").addEventListener("click", () => { state.inspect = !state.inspect; renderGame(); });
+      el("showEvidence").addEventListener("click", () => showLog("Evidence Log", Object.keys(progress.found).map(id => scenario.patterns.find(pat => pat.id === id))));
+      el("showRepairs").addEventListener("click", () => showLog("Repair Notes", Object.keys(progress.repaired).map(id => scenario.patterns.find(pat => pat.id === id))));
+      el("useHint").addEventListener("click", useHint);
     }
 
-    function finishGame() {
-      const total = Object.keys(patterns).length;
-      const curedCount = Object.keys(state.cured).length;
-      document.getElementById("scoreText").textContent = state.score;
-      document.getElementById("foundMetric").textContent = `${curedCount} / ${total}`;
-      document.getElementById("curedMetric").textContent = `${curedCount} / ${total}`;
-      document.getElementById("trustMetric").textContent = `${state.trust}%`;
-      document.getElementById("reportGrid").innerHTML = Object.entries(patterns).map(([id, pattern]) => {
-        const cured = state.cured[id];
-        return `
-          <article class="report-card">
-            <h3>${cured ? "Cured" : "Unresolved"}: ${pattern.title}</h3>
-            <p><strong>Dark Pattern Found:</strong> ${pattern.type}</p>
-            <p><strong>Original Symptom:</strong> ${pattern.original}</p>
-            <p><strong>Ethical Cure:</strong> ${pattern.cure}</p>
-            <p><strong>Design Lesson:</strong> ${pattern.lesson}</p>
-          </article>
+    function openPattern(id) {
+      if (!state.inspect) {
+        state.feedback = "Inspect Mode is off. Turn it on to examine suspicious elements.";
+        renderDiagnosis();
+        return;
+      }
+      state.selectedPatternId = id;
+      state.selectedType = "";
+      state.selectedHarm = "";
+      state.selectedRepair = "";
+      state.feedback = "";
+      renderDiagnosis();
+    }
+
+    function renderDiagnosis() {
+      const scenario = currentScenario();
+      const pattern = scenario?.patterns.find(pat => pat.id === state.selectedPatternId);
+      if (!pattern) {
+        const message = state.feedback
+          ? (state.feedback.includes("<div") ? state.feedback : `<p>${state.feedback}</p>`)
+          : `<p>Turn on Inspect Mode, click a suspicious UI element, then classify the pattern, harm, and repair.</p>`;
+        el("diagnosisPanel").innerHTML = `
+          <div class="diagnosis-empty">
+            <div>
+              <span class="kicker"><span class="status-dot"></span> Diagnosis Mode</span>
+              <h3>Inspect a symptom</h3>
+              ${message}
+            </div>
+          </div>
         `;
-      }).join("");
-      showScreen("resultScreen");
+        return;
+      }
+
+      const typeOptions = shuffleUnique([pattern.category, pattern.patternName, ...categories]).slice(0, 5);
+      if (!typeOptions.includes(pattern.category)) typeOptions[0] = pattern.category;
+      const repairOptions = shuffleUnique([pattern.correctRepair, ...pattern.wrongRepairs]).slice(0, 3);
+      if (!repairOptions.includes(pattern.correctRepair)) repairOptions[0] = pattern.correctRepair;
+
+      el("diagnosisPanel").innerHTML = `
+        <span class="kicker"><span class="status-dot"></span> Symptom Detected</span>
+        <h2>${pattern.patternName}</h2>
+        <p>${pattern.symptomText}</p>
+        <div class="field">
+          <label>1. Pattern Type</label>
+          <div class="choice-list">${typeOptions.map(option => choice("type", option)).join("")}</div>
+        </div>
+        <div class="field">
+          <label>2. Why is it harmful?</label>
+          <div class="choice-list">${harmOptions.map(option => choice("harm", option)).join("")}</div>
+        </div>
+        <div class="field">
+          <label>3. Ethical Repair</label>
+          <div class="choice-list">${repairOptions.map(option => choice("repair", option)).join("")}</div>
+        </div>
+        <button class="btn primary" id="submitDiagnosis">Submit Diagnosis</button>
+        <div id="feedbackSlot">${state.feedback || ""}</div>
+      `;
+      document.querySelectorAll("[data-choice]").forEach(button => button.addEventListener("click", () => {
+        const field = button.dataset.choice;
+        if (field === "type") state.selectedType = button.dataset.value;
+        if (field === "harm") state.selectedHarm = button.dataset.value;
+        if (field === "repair") state.selectedRepair = button.dataset.value;
+        button.parentElement.querySelectorAll(".choice").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+      }));
+      el("submitDiagnosis").addEventListener("click", submitDiagnosis);
     }
 
-    function resetGame() {
-      window.location.reload();
+    function choice(field, value) {
+      return `<button class="choice" data-choice="${field}" data-value="${escapeAttr(value)}">${value}</button>`;
     }
 
-    continueBtn.addEventListener("click", addNextMessage);
-    acceptBtn.addEventListener("click", () => showScreen("gameScreen"));
-    document.getElementById("phone").addEventListener("click", event => {
-      if (event.target.closest("button")) return;
-      if (!continueBtn.hidden) addNextMessage();
-    });
-    document.querySelectorAll(".hotspot").forEach(node => {
-      node.addEventListener("click", () => openDiagnosis(node.dataset.pattern));
-      node.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openDiagnosis(node.dataset.pattern);
+    function submitDiagnosis() {
+      const scenario = currentScenario();
+      const pattern = scenario.patterns.find(pat => pat.id === state.selectedPatternId);
+      const progress = currentProgress();
+      progress.attempts[pattern.id] = (progress.attempts[pattern.id] || 0) + 1;
+
+      if (!state.selectedType || !state.selectedHarm || !state.selectedRepair) {
+        state.feedback = `<div class="feedback warn"><strong>Incomplete diagnosis.</strong><p>Select a type, harm, and repair before submitting.</p></div>`;
+        renderDiagnosis();
+        return;
+      }
+
+      const typeOk = state.selectedType === pattern.category || state.selectedType === pattern.patternName;
+      const harmOk = state.selectedHarm === pattern.userHarm;
+      const repairOk = state.selectedRepair === pattern.correctRepair;
+
+      if (typeOk && harmOk && repairOk) {
+        if (!progress.repaired[pattern.id]) {
+          progress.found[pattern.id] = true;
+          progress.repaired[pattern.id] = true;
+          progress.score += 10 + (progress.attempts[pattern.id] === 1 ? 3 : 0);
         }
+        state.feedback = `
+          <div class="feedback good">
+            <h3>Diagnosis Confirmed</h3>
+            <p><strong>Pattern:</strong> ${pattern.patternName}</p>
+            <p><strong>Why it matters:</strong> ${pattern.whyItIsDark}</p>
+            <p><strong>Repair:</strong> ${pattern.correctRepair}</p>
+            ${researchBlock(pattern)}
+          </div>
+        `;
+        state.selectedPatternId = "";
+        renderGame();
+      } else {
+        progress.found[pattern.id] = true;
+        progress.score = Math.max(0, progress.score - 1);
+        const reason = !typeOk ? pattern.hint : !harmOk ? `Look at the user harm: ${pattern.userHarm}` : "The repair should remove the mechanism, not just decorate it.";
+        state.feedback = `<div class="feedback bad"><h3>Not quite.</h3><p>${reason}</p><p>Try again. The symptom is still active.</p></div>`;
+        renderDiagnosis();
+        renderToolbar();
+      }
+    }
+
+    function researchBlock(pattern) {
+      const notes = pattern.researchRefIds.map(id => researchNotes.find(note => note.id === id)).filter(Boolean);
+      return notes.map(note => `
+        <details class="research-note">
+          <summary>Research Note: ${note.sourceName}</summary>
+          <p>${note.shortText}</p>
+          <a href="${note.sourceUrl}" target="_blank" rel="noreferrer" style="color:var(--diagnosis-blue)">${note.title}</a>
+        </details>
+      `).join("");
+    }
+
+    function useHint() {
+      const scenario = currentScenario();
+      const pagePatterns = scenario.patterns.filter(pattern => pattern.pageId === state.pageId && !currentProgress().repaired[pattern.id]);
+      if (state.hintsLeft <= 0) {
+        state.feedback = "No hints left for this case.";
+      } else if (pagePatterns.length === 0) {
+        state.feedback = "No untreated symptoms are visible on this page. Try another page tab.";
+      } else {
+        state.hintsLeft -= 1;
+        state.feedback = pagePatterns[0].hint;
+      }
+      renderDiagnosis();
+      renderToolbar();
+    }
+
+    function showLog(title, items) {
+      el("modal").classList.add("active");
+      el("glossaryGrid").innerHTML = items.length ? items.map(item => `
+        <div class="report-item">
+          <h3>${item.patternName}</h3>
+          <p>${item.symptomText}</p>
+          <span class="chip blue">${item.category}</span>
+        </div>
+      `).join("") : `<p class="muted">No entries yet.</p>`;
+      document.querySelector(".modal-card h2").textContent = title;
+    }
+
+    function finishReport() {
+      const scenario = currentScenario();
+      const progress = currentProgress();
+      const foundIds = Object.keys(progress.found);
+      const repairedIds = Object.keys(progress.repaired);
+      const missed = scenario.patterns.filter(pattern => !progress.found[pattern.id]);
+      const found = scenario.patterns.filter(pattern => progress.found[pattern.id]);
+      const mostHarmful = missed.find(pattern => pattern.difficulty === "hard" || pattern.difficulty === "subtle") || found.find(pattern => pattern.difficulty === "hard" || pattern.difficulty === "subtle") || scenario.patterns[0];
+      const accuracy = Math.round((repairedIds.length / scenario.patterns.length) * 100);
+
+      el("reportPanel").innerHTML = `
+        <div class="clinic-top">
+          <div>
+            <span class="kicker"><span class="status-dot"></span> Diagnosis Report</span>
+            <h1>${scenario.title}</h1>
+            <p class="muted">PATIENT: ${scenario.subtitle} / STATUS: ${accuracy === 100 ? "Cured" : "Partially Cured"} / RISK LEVEL: ${scenario.difficulty}</p>
+          </div>
+          <div class="fake-ui">
+            <button class="btn" id="reportCases">Case Cabinet</button>
+            <button class="btn primary" id="nextCase">Next Case</button>
+          </div>
+        </div>
+        <div class="report-grid">
+          <div class="report-card"><span class="kicker">Diagnosis Accuracy</span><h2>${accuracy}%</h2><p class="muted">Score ${progress.score}</p></div>
+          <div class="report-card"><span class="kicker">Found / Repaired</span><h2>${foundIds.length} / ${repairedIds.length}</h2><p class="muted">Total symptoms ${scenario.patterns.length}</p></div>
+          <div class="report-card"><span class="kicker">Missed Symptoms</span><h2>${missed.length}</h2><p class="muted">${missed.map(pattern => pattern.patternName).join(", ") || "None"}</p></div>
+          <div class="report-card"><span class="kicker">Most Harmful Pattern</span><h2>${mostHarmful.patternName}</h2><p class="muted">${mostHarmful.userHarm}</p></div>
+        </div>
+        <section class="report-card" style="margin-top:14px">
+          <h2>Ethical Design Summary</h2>
+          <p>Transparent systems show costs, consequences, consent, privacy settings, and reversal paths before users commit. Repairs should be neutral, visible, reversible, and proportional to the user's task.</p>
+        </section>
+        <div class="report-grid">
+          <section class="report-card">
+            <h2>Diagnosed Symptoms</h2>
+            <div class="report-list">${found.map(pattern => reportItem(pattern, progress.repaired[pattern.id])).join("") || `<p class="muted">No symptoms diagnosed yet.</p>`}</div>
+          </section>
+          <section class="report-card">
+            <h2>Research Notes</h2>
+            <div class="report-list">${scenario.patterns.slice(0, 4).map(pattern => researchBlock(pattern)).join("")}</div>
+          </section>
+        </div>
+      `;
+      el("reportCases").addEventListener("click", () => { renderCases(); showScreen("caseScreen"); });
+      el("nextCase").addEventListener("click", () => {
+        const index = scenarios.findIndex(s => s.id === scenario.id);
+        startScenario(scenarios[(index + 1) % scenarios.length].id);
       });
-    });
-    document.getElementById("finishBtn").addEventListener("click", finishGame);
-    document.getElementById("restartBtn").addEventListener("click", resetGame);
+      showScreen("reportScreen");
+    }
 
-    let seconds = 299;
-    setInterval(() => {
-      seconds -= 1;
-      if (seconds < 0) seconds = 299;
-      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
-      const sec = String(seconds % 60).padStart(2, "0");
-      const timer = document.getElementById("timer");
-      if (timer) timer.textContent = `Offer expires in ${min}:${sec}`;
-    }, 1000);
+    function reportItem(pattern, repaired) {
+      return `
+        <div class="report-item">
+          <h3>${repaired ? "Repaired" : "Found"}: ${pattern.patternName}</h3>
+          <p>${pattern.symptomText}</p>
+          <p><strong>Repair:</strong> ${pattern.correctRepair}</p>
+          <span class="chip ${repaired ? "green" : "yellow"}">${pattern.category}</span>
+        </div>
+      `;
+    }
 
-    addNextMessage();
-    updateStatus();
+    function renderGlossary() {
+      document.querySelector(".modal-card h2").textContent = "Dark Pattern Glossary";
+      el("glossaryGrid").innerHTML = categories.map(category => `
+        <div class="report-item">
+          <h3>${category}</h3>
+          <p class="muted">${glossaryText(category)}</p>
+        </div>
+      `).join("") + researchNotes.map(note => `
+        <div class="report-item">
+          <h3>${note.sourceName}</h3>
+          <p class="muted">${note.shortText}</p>
+          <a href="${note.sourceUrl}" target="_blank" rel="noreferrer" style="color:var(--diagnosis-blue)">${note.title}</a>
+        </div>
+      `).join("");
+      el("modal").classList.add("active");
+    }
+
+    function glossaryText(category) {
+      const text = {
+        Nagging: "Repeated requests that interrupt a user's task after refusal.",
+        Obstruction: "Extra friction that makes an action, reversal, or right hard to complete.",
+        Sneaking: "Adding or changing things without clear active consent.",
+        "Interface Interference": "Visual or structural choices that steer decisions unfairly.",
+        "Forced Action": "Requiring unnecessary action or data to complete a task.",
+        Urgency: "Pressure based on time limits that may be false or unverifiable.",
+        Scarcity: "Pressure based on stock or availability claims that may be false.",
+        "Social Proof": "Using popularity claims without source or relevance.",
+        Privacy: "Privacy-invasive defaults, permissions, or consent design.",
+        "Emotional Steering": "Fear, guilt, or shame used to push a choice.",
+        Confirmshaming: "Refusal copy that judges or shames the user.",
+        "Hidden Costs": "Mandatory costs revealed late or in low-visibility areas.",
+        Preselection: "Optional choices selected by default.",
+        "Hard to Cancel": "Cancellation is more difficult than signup.",
+        "Comparison Prevention": "Information architecture that blocks fair comparison.",
+        "Hidden Subscription": "Renewal terms hidden in small print or distant links.",
+        "Bait and Switch": "The delivered outcome differs from the promised one."
+      };
+      return text[category] || "A deceptive design mechanism that impairs informed choice.";
+    }
+
+    function shuffleUnique(items) {
+      return [...new Set(items)].sort((a, b) => (a.length % 7) - (b.length % 7));
+    }
+
+    function escapeAttr(value) {
+      return String(value).replace(/"/g, "&quot;");
+    }
+
+    el("continueIntro").addEventListener("click", addIntro);
+    el("openCases").addEventListener("click", () => { renderCases(); showScreen("caseScreen"); });
+    el("backToCases").addEventListener("click", () => { renderCases(); showScreen("caseScreen"); });
+    el("finishCase").addEventListener("click", finishReport);
+    el("openGlossary").addEventListener("click", renderGlossary);
+    el("closeModal").addEventListener("click", () => el("modal").classList.remove("active"));
+    el("modal").addEventListener("click", event => { if (event.target.id === "modal") el("modal").classList.remove("active"); });
+
+    addIntro();
   </script>
 </body>
 </html>
