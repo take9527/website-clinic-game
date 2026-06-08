@@ -800,6 +800,10 @@
       width: min(760px, 100%);
     }
 
+    .diagnosis-modal {
+      z-index: 90;
+    }
+
     .toast {
       position: fixed;
       z-index: 60;
@@ -1986,6 +1990,7 @@
     }
 
     function openFlightDiagnosis(id) {
+      if (id === "DP06") state.insuranceModal = false;
       state.selectedPatternId = id;
       state.selectedType = "";
       state.selectedHarm = "";
