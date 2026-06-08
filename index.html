@@ -421,6 +421,285 @@
     .fake-button.green { background: #32835d; }
     .fake-button.yellow { color: #251d07; background: #ffd166; }
 
+    .booking-site {
+      background: #f6f8fb;
+      color: #17212b;
+    }
+
+    .booking-hero {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      color: #fff;
+      background: linear-gradient(135deg, #104c8b, #2e8be8);
+    }
+
+    .booking-search {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr) auto;
+      gap: 10px;
+      border-radius: var(--radius);
+      padding: 12px;
+      background: rgba(255,255,255,0.16);
+    }
+
+    .booking-input, .booking-card, .fare-card, .summary-card, .addon-card, .payment-card {
+      border: 1px solid #d7e0e8;
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .booking-input {
+      min-height: 48px;
+      padding: 8px 10px;
+      color: #5c6a78;
+      font-size: 0.86rem;
+    }
+
+    .booking-input strong {
+      display: block;
+      color: #17212b;
+      font-size: 1rem;
+    }
+
+    .booking-content {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .booking-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .booking-card, .fare-card, .addon-card, .payment-card {
+      padding: 14px;
+    }
+
+    .flight-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .flight-times {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-weight: 900;
+      font-size: 1.28rem;
+    }
+
+    .flight-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      color: #637182;
+      font-size: 0.86rem;
+    }
+
+    .booking-pill {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #29405a;
+      background: #edf4fb;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .booking-pill.hot {
+      color: #67390b;
+      background: #fff0ce;
+    }
+
+    .booking-pill.soft {
+      color: #52606c;
+      background: #eef1f5;
+    }
+
+    .timer-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #1e3552;
+      background: #e8f2ff;
+      font-weight: 850;
+    }
+
+    .timer-strip strong {
+      font-variant-numeric: tabular-nums;
+      font-size: 1.08rem;
+    }
+
+    .fare-grid, .addon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .fare-card.featured {
+      border-color: #2e8be8;
+      box-shadow: 0 12px 30px rgba(46, 139, 232, 0.18);
+      transform: scale(1.03);
+    }
+
+    .fare-card h3 {
+      color: #17212b;
+    }
+
+    .fare-price {
+      margin: 8px 0;
+      font-size: 1.8rem;
+      font-weight: 950;
+    }
+
+    .fare-card ul {
+      min-height: 110px;
+      margin: 0 0 12px;
+      padding-left: 18px;
+      color: #52606c;
+    }
+
+    .link-button {
+      color: #7d8791;
+      background: transparent;
+      text-decoration: underline;
+      font-weight: 850;
+    }
+
+    .summary-card {
+      position: sticky;
+      top: 14px;
+      padding: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #e7edf2;
+      padding: 8px 0;
+      color: #52606c;
+    }
+
+    .summary-row:last-child {
+      border-bottom: 0;
+    }
+
+    .summary-row.total {
+      color: #17212b;
+      font-size: 1.1rem;
+      font-weight: 950;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .form-field {
+      border: 1px solid #d7e0e8;
+      border-radius: var(--radius);
+      padding: 10px;
+      color: #627282;
+      background: #fff;
+    }
+
+    .form-field strong {
+      display: block;
+      color: #17212b;
+    }
+
+    .addon-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.35;
+    }
+
+    .seat-map {
+      display: grid;
+      grid-template-columns: repeat(6, 34px);
+      gap: 7px;
+      margin: 10px 0;
+    }
+
+    .seat {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 6px;
+      color: #fff;
+      background: #2e8be8;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .seat.free {
+      color: #6c7884;
+      background: #edf1f4;
+    }
+
+    .booking-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .booking-modal.active {
+      display: grid;
+    }
+
+    .insurance-card {
+      width: min(440px, 100%);
+      border-radius: var(--radius);
+      padding: 18px;
+      color: #17212b;
+      background: #fff;
+      box-shadow: var(--shadow);
+      animation: bubbleIn 180ms ease both;
+    }
+
+    .diagnosable {
+      cursor: pointer;
+      transition: box-shadow 140ms ease, transform 140ms ease;
+    }
+
+    .diagnosable:hover {
+      box-shadow: 0 0 0 3px rgba(46, 139, 232, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .diagnosable.cured {
+      box-shadow: 0 0 0 3px rgba(155, 231, 192, 0.5);
+    }
+
+    .plain-click {
+      cursor: pointer;
+    }
+
     .symptom-node {
       position: relative;
       min-height: 116px;
@@ -792,23 +1071,23 @@
         caseBrief: "A low-cost airline flow nudges users through pressure, defaults, hidden fees, and hard-to-change add-ons.",
         visualTheme: "Airline booking slice",
         pages: [
-          page("search", "Flight Search", "landing", "The patient website begins with a fare search and a pulse of time pressure.", ["London to Lisbon", "Base fare from EUR 49.99", "Flexible date search"]),
-          page("results", "Flight Results", "listing", "Multiple fares appear, each framed as almost gone.", ["Fare cards", "Countdown banner", "Almost sold out badges"]),
-          page("details", "Flight Detail", "detail", "The selected fare now grows through seats, bags, and priority services.", ["Seat preview", "Fare bundle comparison", "Priority boarding block"]),
-          page("passenger", "Passenger Info", "form", "Passenger details appear ordinary, but change links begin to disappear.", ["Passenger form", "Contact details", "Trip summary"]),
-          page("addons", "Seat, Baggage & Insurance", "modal", "Add-ons are inserted through modals and preselected choices.", ["Seat selection modal", "Baggage add-on", "Insurance pop-up"]),
-          page("payment", "Payment", "payment", "The final total changes after the user reaches payment.", ["Payment method", "Fee breakdown", "Confirm booking"]),
-          page("summary", "Booking Summary", "summary", "The cured flow should make changes and refusals visible.", ["Final itinerary", "Edit links", "Receipt"])
+          page("search", "Flight Search", "landing", "Search for a flight like a normal traveler.", ["London to Lisbon", "Round trip", "2 passengers"]),
+          page("results", "Flight Results", "listing", "Choose from available flights and fare signals.", ["Fare cards", "Countdown banner", "Viewer counts"]),
+          page("fare", "Fare Choice", "detail", "Compare Basic, Standard, and Flex bundles.", ["Basic fare", "Standard fare", "Flex fare"]),
+          page("passenger", "Passenger Info", "form", "Enter passenger and contact details.", ["Passenger form", "Contact details", "Consent checkboxes"]),
+          page("addons", "Seats and Add-ons", "cart", "Choose seats, baggage, insurance, priority boarding, and carbon offset.", ["Seat map", "Add-on cards", "Sticky price summary"]),
+          page("payment", "Payment", "payment", "Review the final price and payment method.", ["Payment method", "Fee breakdown", "Confirm booking"]),
+          page("summary", "Order Complete", "summary", "Review the booking and open the diagnosis report.", ["Booking number", "Added services", "Diagnosis report"])
         ],
         patterns: [
-          p("F1", "results", "Fake Urgency", "Urgency", "obvious", "A countdown claims the fare expires soon and resets after refresh.", "The timer manufactures pressure instead of informing the user.", "It pressures users with unverifiable claims.", "Only show real deadlines tied to verifiable fare rules.", ["Make the timer larger.", "Hide the timer in a tooltip."], "Does the deadline persist, or does it restart?", ["deceptive", "mathur"]),
-          p("F2", "results", "Fake Scarcity", "Scarcity", "obvious", "Several flights all say Almost sold out without inventory evidence.", "Scarcity claims are repeated and unverifiable.", "It pressures users with unverifiable claims.", "Remove unverifiable inventory labels or show the source and freshness.", ["Use brighter red labels.", "Move scarcity into the page title."], "Can the user verify this stock claim?", ["mathur"]),
-          p("F3", "addons", "Preselected Insurance", "Preselection", "obvious", "Travel insurance is checked by default.", "Optional paid services should require active consent.", "It hides key information.", "Default optional paid services to off and present both choices equally.", ["Keep it checked but add small print.", "Put refusal below the fold."], "Was this added by the user or by the interface?", ["deceptive"]),
-          p("F4", "payment", "Hidden Costs", "Hidden Costs", "medium", "Service and payment fees appear only at the final payment step.", "Mandatory fees are delayed until after the user has invested effort.", "It hides key information.", "Disclose full mandatory costs from results and cart summaries onward.", ["Rename the fees.", "Show fees after card entry."], "When did the user first learn the real total?", ["deceptive", "ftc"]),
-          p("F5", "addons", "Confirmshaming", "Confirmshaming", "obvious", "The insurance refusal says No, I prefer to travel unprotected.", "The refusal judges the user instead of describing the action.", "It makes refusal emotionally difficult.", "Use neutral refusal copy such as No thanks or Continue without insurance.", ["Remove the refusal button.", "Make the shame copy smaller."], "Is the button describing an action or judging the user?", ["deceptive"]),
-          p("F6", "details", "Visual Interference", "Interface Interference", "medium", "Paid seats are bright and free random seats are a faint text link.", "Visual hierarchy steers users toward the paid option.", "It makes comparison or reversal harder.", "Present paid and free seating choices with balanced visibility and clear differences.", ["Hide random seating.", "Mark all free seats as risky."], "Which option is easiest to see?", ["gray", "nng"]),
-          p("F7", "addons", "Sneak into Basket", "Sneaking", "medium", "Priority boarding is inserted into the basket automatically.", "The basket changes without an active user choice.", "It hides key information.", "Add extras only after explicit opt-in.", ["Mention it in small text.", "Preselect it but make it cheaper."], "Did the user click to add this service?", ["gray", "deceptive"]),
-          p("F8", "summary", "Hard to Change", "Obstruction", "subtle", "Changing flight or baggage is buried behind multiple summary menus.", "Reversal is harder than purchase.", "It adds unnecessary steps.", "Provide direct edit links beside each summary item.", ["Only allow support chat changes.", "Add another confirmation page."], "How many steps does undoing the choice take?", ["gray", "ftc"])
+          p("DP01", "results", "Fake Urgency", "Urgency", "obvious", "A live countdown tells users to hold the fare for a limited time, but it resets when the results page is re-entered.", "The timer pressures users to decide quickly without a reliable booking deadline.", "It pressures users with unverifiable claims.", "Remove the fake timer or explain the real booking deadline.", ["Make the countdown more prominent.", "Hide the timer in the terms."], "Does the countdown behave like a real deadline, or does it reset?", ["deceptive", "mathur"]),
+          p("DP02", "results", "Fake Scarcity", "Scarcity", "obvious", "Flight cards repeat Only 2 seats left at this price across different flights.", "Unverified inventory claims manufacture scarcity.", "It pressures users with unverifiable claims.", "Only show verifiable inventory, or delete unverifiable scarcity messages.", ["Use stronger scarcity copy.", "Move stock claims into a tooltip."], "Do multiple flights show the same low stock claim?", ["mathur"]),
+          p("DP03", "results", "Fake Social Proof", "Social Proof", "medium", "The flight card shows a changing number of people viewing this flight without a data source.", "Fake crowd behavior nudges users through social pressure.", "It pressures users with unverifiable claims.", "Use social proof only with real data and a clear statistic source.", ["Animate the viewer number faster.", "Hide the source in a legal page."], "Can the user tell where the viewer number comes from?", ["mathur", "oecd"]),
+          p("DP04", "fare", "False Hierarchy", "Interface Interference", "medium", "Standard is the largest, brightest fare card with a Best Choice badge, while Basic uses a weak text link.", "Visual hierarchy steers users toward the more expensive fare.", "It makes comparison or reversal harder.", "Show all fare choices with balanced visual weight and clear differences.", ["Make Standard even brighter.", "Hide Basic below the fold."], "Which fare looks like the only normal way forward?", ["gray", "nng"]),
+          p("DP05", "addons", "Preselection", "Preselection", "medium", "Baggage, insurance, SMS updates, carbon offset, and priority boarding are selected by default and already change the total.", "Default paid add-ons turn passive continuation into purchase consent.", "It hides key information.", "Make all paid add-ons opt-in, with no extras selected by default.", ["Keep defaults but add small print.", "Show the add-ons only on the receipt."], "Which services were selected before the user chose them?", ["deceptive", "oecd"]),
+          p("DP06", "addons", "Confirmshaming", "Confirmshaming", "obvious", "The insurance modal refusal says No thanks, I will risk my trip.", "The refusal uses fear and shame instead of neutral action language.", "It makes refusal emotionally difficult.", "Use neutral refusal copy such as No insurance.", ["Remove the refusal path.", "Make the fear copy smaller."], "Is the refusal describing an action, or judging the user?", ["deceptive"]),
+          p("DP07", "payment", "Hidden Costs / Drip Pricing", "Hidden Costs", "subtle", "The payment page adds online check-in, service, and processing fees after earlier pages showed the fare price.", "Mandatory costs are delayed until the user has invested time.", "It hides key information.", "Show all mandatory fees in the search results or fare page upfront.", ["Rename fees as support costs.", "Show fees after card details."], "Compare the earlier fare total with the payment total.", ["ftc", "oecd"]),
+          p("DP08", "payment", "Obstruction", "Obstruction", "subtle", "Trying to remove insurance or go back to modify services triggers extra confirmation steps and a hidden cancellation path.", "Removing an add-on is harder than adding it.", "It adds unnecessary steps.", "Make adding and removing services equally direct.", ["Add another confirmation prompt.", "Send users to support chat."], "Try changing a service: is removal as easy as adding?", ["gray", "ftc"])
         ]
       },
       {
@@ -937,6 +1216,23 @@
       selectedRepair: "",
       feedback: "",
       hintsLeft: 3,
+      flightTimer: 600,
+      timerHandle: null,
+      insuranceModal: false,
+      obstructionActive: false,
+      booking: {
+        fare: "standard",
+        baseFare: 96,
+        addons: {
+          cabinBag: true,
+          seat: true,
+          insurance: true,
+          sms: true,
+          carbon: true,
+          priority: true
+        },
+        paymentFeesVisible: false
+      },
       progress: {}
     };
 
@@ -1009,12 +1305,17 @@
       state.selectedPatternId = "";
       state.feedback = "";
       state.hintsLeft = 3;
+      if (id === "flight") resetFlightBooking();
       renderGame();
       showScreen("gameScreen");
     }
 
     function renderGame() {
       const scenario = currentScenario();
+      if (scenario.id === "flight") {
+        renderFlightGame();
+        return;
+      }
       const pageData = scenario.pages.find(pg => pg.id === state.pageId);
       const progress = currentProgress();
       el("caseKicker").textContent = `Case ${scenario.id.toUpperCase()} / Risk ${scenario.difficulty}`;
@@ -1061,6 +1362,370 @@
       document.querySelectorAll("[data-pattern]").forEach(node => node.addEventListener("click", () => openPattern(node.dataset.pattern)));
       renderToolbar();
       renderDiagnosis();
+    }
+
+    function resetFlightBooking() {
+      stopFlightTimer();
+      state.flightTimer = 600;
+      state.insuranceModal = false;
+      state.obstructionActive = false;
+      state.booking = {
+        fare: "standard",
+        baseFare: 96,
+        addons: {
+          cabinBag: true,
+          seat: true,
+          insurance: true,
+          sms: true,
+          carbon: true,
+          priority: true
+        },
+        paymentFeesVisible: false
+      };
+    }
+
+    function renderFlightGame() {
+      const scenario = currentScenario();
+      const pageData = scenario.pages.find(pg => pg.id === state.pageId);
+      const progress = currentProgress();
+      el("caseKicker").textContent = "CASE #01 / FLIGHT BOOKING / RISK: EASY";
+      el("caseTitle").textContent = "FlyFast Airlines";
+      el("caseBrief").textContent = "Inspect a realistic booking flow. Symptoms are not marked before diagnosis.";
+
+      if (state.pageId === "results") startFlightTimer();
+      else stopFlightTimer();
+
+      el("gamePanel").innerHTML = `
+        <div class="case-header">
+          <div>
+            <span class="kicker"><span class="status-dot"></span> Live Booking Simulation</span>
+            <h2>${pageData.title}</h2>
+            <p class="muted">${pageData.lead}</p>
+          </div>
+          <span class="chip green">Step ${scenario.pages.findIndex(pg => pg.id === state.pageId) + 1} / ${scenario.pages.length}</span>
+        </div>
+        <nav class="page-nav">
+          ${scenario.pages.map(pg => `<button class="page-tab ${pg.id === state.pageId ? "active" : ""}" data-flight-page="${pg.id}">${pg.title}</button>`).join("")}
+        </nav>
+        <section class="web-slice booking-site">
+          ${renderFlightPage()}
+        </section>
+        ${renderInsuranceModal()}
+      `;
+
+      document.querySelectorAll("[data-flight-page]").forEach(button => button.addEventListener("click", () => goFlightPage(button.dataset.flightPage)));
+      document.querySelectorAll("[data-pattern]").forEach(node => node.addEventListener("click", event => {
+        event.stopPropagation();
+        openPattern(node.dataset.pattern);
+      }));
+      document.querySelectorAll("[data-action]").forEach(node => node.addEventListener("click", event => handleFlightAction(event, node.dataset.action)));
+      document.querySelector(".booking-site")?.addEventListener("click", event => {
+        if (!event.target.closest("[data-pattern]") && !event.target.closest("[data-action]")) {
+          state.feedback = "No clear symptom found here. Keep inspecting the booking flow.";
+          renderDiagnosis();
+        }
+      });
+      renderToolbar();
+      renderDiagnosis();
+      renderFlightTimerText();
+    }
+
+    function renderFlightPage() {
+      const withSummary = ["fare", "addons", "payment"].includes(state.pageId);
+      const content = {
+        search: renderFlightSearch,
+        results: renderFlightResults,
+        fare: renderFareChoice,
+        passenger: renderPassengerInfo,
+        addons: renderAddons,
+        payment: renderPayment,
+        summary: renderBookingComplete
+      }[state.pageId]();
+
+      return `
+        ${state.pageId === "search" ? "" : `<div class="mock-top"><strong>FlyFast Airlines</strong><span class="booking-pill soft">Booking ref pending</span></div>`}
+        <div class="booking-content">
+          ${withSummary ? `<div class="booking-layout"><div>${content}</div>${renderPriceSummary()}</div>` : content}
+        </div>
+      `;
+    }
+
+    function renderFlightSearch() {
+      return `
+        <div class="booking-hero">
+          <h2>Book your next flight</h2>
+          <p>Low fares from FlyFast. Search, compare, and complete your booking.</p>
+          <div class="booking-search">
+            <div class="booking-input"><span>From</span><strong>London</strong></div>
+            <div class="booking-input"><span>To</span><strong>Lisbon</strong></div>
+            <div class="booking-input"><span>Depart</span><strong>18 Jul</strong></div>
+            <div class="booking-input"><span>Return</span><strong>25 Jul</strong></div>
+            <div class="booking-input"><span>Passengers</span><strong>2 adults</strong></div>
+            <button class="btn primary" data-action="searchFlights">Search</button>
+          </div>
+        </div>
+        <div class="booking-card plain-click">
+          <h3>Travel updates</h3>
+          <p>Cookies help us personalize fares and track booking performance.</p>
+          <div class="fake-ui"><button class="fake-button">Accept all</button><button class="fake-button weak">Manage settings</button></div>
+        </div>
+      `;
+    }
+
+    function renderFlightResults() {
+      const curedUrgency = currentProgress().repaired.DP01;
+      const curedScarcity = currentProgress().repaired.DP02;
+      const curedSocial = currentProgress().repaired.DP03;
+      return `
+        ${curedUrgency ? `<div class="timer-strip"><span>Current fares are displayed below.</span><span class="booking-pill soft">No artificial deadline</span></div>` : `<div class="timer-strip diagnosable" data-pattern="DP01"><span>Hold your fare for <strong id="flightTimerText">${formatTimer(state.flightTimer)}</strong></span><span>Prices may change when the timer ends.</span></div>`}
+        <div class="booking-list">
+          ${[["07:20","10:05","68.00"],["11:40","14:30","74.00"],["19:10","21:55","81.00"]].map((flight, index) => `
+            <div class="booking-card flight-card">
+              <div>
+                <div class="flight-times"><span>${flight[0]}</span><span>LGW → LIS</span><span>${flight[1]}</span></div>
+                <div class="flight-meta">
+                  <span>Direct</span><span>2h 45m</span>
+                  ${curedScarcity ? `<span class="booking-pill soft">Availability shown at checkout</span>` : `<span class="booking-pill hot diagnosable" data-pattern="DP02">Only 2 seats left at this price</span>`}
+                  ${curedSocial ? `<span class="booking-pill soft">No viewer estimate</span>` : `<span class="booking-pill diagnosable" data-pattern="DP03">${37 + (state.flightTimer % 5)} people are viewing this flight</span>`}
+                </div>
+              </div>
+              <div style="text-align:right">
+                <strong style="font-size:1.5rem">€${flight[2]}</strong>
+                <button class="btn primary" data-action="chooseFlight">Select</button>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderFareChoice() {
+      const cured = currentProgress().repaired.DP04;
+      return `
+        <div class="fare-grid ${cured ? "cured" : ""}">
+          <div class="fare-card ${cured ? "" : "diagnosable"}" ${cured ? "" : "data-pattern=\"DP04\""}>
+            <h3>Basic</h3>
+            <div class="fare-price">€68</div>
+            <ul><li>Small cabin bag only</li><li>Seat assigned at check-in</li><li>Changes for a fee</li></ul>
+            <button class="${cured ? "btn" : "link-button"}" data-action="selectBasic">Select Basic</button>
+          </div>
+          <div class="fare-card featured ${cured ? "" : "diagnosable"}" ${cured ? "" : "data-pattern=\"DP04\""}>
+            <span class="booking-pill hot">Best Choice</span>
+            <h3>Standard</h3>
+            <div class="fare-price">€96</div>
+            <ul><li>Cabin bag included</li><li>Choose your seat</li><li>Priority boarding available</li></ul>
+            <button class="btn primary" data-action="selectStandard">Continue with Standard</button>
+          </div>
+          <div class="fare-card ${cured ? "" : "diagnosable"}" ${cured ? "" : "data-pattern=\"DP04\""}>
+            <h3>Flex</h3>
+            <div class="fare-price">€145</div>
+            <ul><li>Free changes</li><li>Priority boarding</li><li>Refundable fare</li></ul>
+            <button class="btn" data-action="selectFlex">Select Flex</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPassengerInfo() {
+      return `
+        <div class="payment-card">
+          <h3>Passenger details</h3>
+          <div class="form-grid">
+            ${["First name: Alex","Last name: Rivera","Date of birth: 12 May 1993","Nationality: United Kingdom","Passport: 123456789","Email: alex@example.com","Phone: +44 7000 000000","Create account: checked"].map(text => `<div class="form-field"><strong>${text.split(":")[0]}</strong><span>${text.split(":").slice(1).join(":")}</span></div>`).join("")}
+          </div>
+          <div class="fake-ui"><button class="btn primary" data-action="continuePassenger">Continue</button><button class="btn ghost">Back</button></div>
+        </div>
+      `;
+    }
+
+    function renderAddons() {
+      const curedPreselection = currentProgress().repaired.DP05;
+      return `
+        <div class="booking-list">
+          <div class="payment-card">
+            <h3>Choose seats</h3>
+            <div class="seat-map">${Array.from({ length: 24 }, (_, i) => `<span class="seat ${i % 5 === 0 ? "free" : ""}">${i + 1}</span>`).join("")}</div>
+            <p class="muted">Blue seats are available for €12.99. Free random seating is assigned at check-in.</p>
+          </div>
+          <div class="addon-grid ${curedPreselection ? "" : "diagnosable"}" ${curedPreselection ? "" : "data-pattern=\"DP05\""}>
+            ${addonCard("cabinBag", "Cabin bag", "Add a 10kg cabin bag", "€24.99")}
+            ${addonCard("insurance", "Travel insurance", "Protection for delays and baggage", "€16.99")}
+            ${addonCard("sms", "SMS notifications", "Receive trip updates by text", "€3.99")}
+            ${addonCard("carbon", "Carbon offset", "Offset this trip footprint", "€4.99")}
+            ${addonCard("priority", "Priority boarding", "Board early and use priority lane", "€14.99")}
+            ${addonCard("seat", "Seat selection", "Keep your chosen seat", "€12.99")}
+          </div>
+          <div class="fake-ui">
+            <button class="btn" data-action="openInsurance">Review insurance</button>
+            <button class="btn primary" data-action="continueToPayment">Continue to payment</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function addonCard(key, title, text, price) {
+      const checked = state.booking.addons[key] ? "checked" : "";
+      return `
+        <div class="addon-card">
+          <label>
+            <input type="checkbox" ${checked} data-action="toggleAddon:${key}">
+            <span><strong>${title}</strong><br><span class="muted">${text}</span><br><strong>${price}</strong></span>
+          </label>
+        </div>
+      `;
+    }
+
+    function renderPayment() {
+      state.booking.paymentFeesVisible = true;
+      const curedCosts = currentProgress().repaired.DP07;
+      return `
+        <div class="booking-list">
+          <div class="payment-card">
+            <h3>Payment method</h3>
+            <div class="form-grid">
+              <div class="form-field"><strong>Card number</strong><span>•••• •••• •••• 4242</span></div>
+              <div class="form-field"><strong>Name on card</strong><span>Alex Rivera</span></div>
+            </div>
+          </div>
+          <div class="payment-card ${curedCosts ? "" : "diagnosable"}" ${curedCosts ? "" : "data-pattern=\"DP07\""}>
+            <h3>Order summary</h3>
+            <p>Online check-in fee, service fee, and payment processing fee are included in the total below.</p>
+          </div>
+          <div class="payment-card ${state.obstructionActive ? "diagnosable" : ""}" ${state.obstructionActive ? "data-pattern=\"DP08\"" : ""}>
+            <h3>Need to change something?</h3>
+            <p class="muted">${state.obstructionActive ? "To remove insurance, confirm this change, reopen add-ons, and review the fare again." : "You can review your services before paying."}</p>
+            <div class="fake-ui">
+              <button class="btn" data-action="triggerObstruction">Remove insurance</button>
+              <button class="btn ghost" data-action="triggerObstruction">Back to add-ons</button>
+              <button class="btn primary" data-action="completeBooking">Pay now</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBookingComplete() {
+      return `
+        <div class="payment-card">
+          <h2>Booking complete</h2>
+          <p>Booking number FF-2407-LIS. Your itinerary has been sent to alex@example.com.</p>
+          <div class="report-grid">
+            <div class="report-item"><h3>Flight</h3><p>London to Lisbon, 18 Jul</p></div>
+            <div class="report-item"><h3>Total paid</h3><p>€${flightTotal().toFixed(2)}</p></div>
+          </div>
+          <div class="fake-ui"><button class="btn primary" data-action="finishFlightReport">View diagnosis report</button></div>
+        </div>
+      `;
+    }
+
+    function renderPriceSummary() {
+      const rows = flightPriceRows();
+      return `
+        <aside class="summary-card">
+          <h3>Trip summary</h3>
+          ${rows.map(row => `<div class="summary-row ${row.total ? "total" : ""} ${row.pattern ? "diagnosable" : ""}" ${row.pattern ? `data-pattern="${row.pattern}"` : ""}><span>${row.label}</span><strong>€${row.amount.toFixed(2)}</strong></div>`).join("")}
+        </aside>
+      `;
+    }
+
+    function flightPriceRows() {
+      const prices = { cabinBag: 24.99, seat: 12.99, insurance: 16.99, sms: 3.99, carbon: 4.99, priority: 14.99 };
+      const rows = [{ label: "Flight fare", amount: state.booking.baseFare }];
+      Object.entries(prices).forEach(([key, amount]) => {
+        if (state.booking.addons[key]) rows.push({ label: labelForAddon(key), amount, pattern: state.pageId === "addons" ? "DP05" : "" });
+      });
+      if (state.pageId === "payment" || state.booking.paymentFeesVisible) {
+        rows.push({ label: "Online check-in fee", amount: 7.99, pattern: "DP07" });
+        rows.push({ label: "Service fee", amount: 9.99, pattern: "DP07" });
+        rows.push({ label: "Payment processing fee", amount: 5.99, pattern: "DP07" });
+      }
+      rows.push({ label: "Total", amount: rows.reduce((sum, row) => sum + row.amount, 0), total: true });
+      return rows;
+    }
+
+    function flightTotal() {
+      return flightPriceRows().filter(row => !row.total).reduce((sum, row) => sum + row.amount, 0);
+    }
+
+    function labelForAddon(key) {
+      return ({ cabinBag: "Cabin bag", seat: "Seat selection", insurance: "Travel insurance", sms: "SMS notification", carbon: "Carbon offset", priority: "Priority boarding" })[key] || key;
+    }
+
+    function renderInsuranceModal() {
+      return `
+        <div class="booking-modal ${state.insuranceModal ? "active" : ""}">
+          <div class="insurance-card">
+            <button class="link-button" style="float:right" data-action="closeInsurance">close</button>
+            <h2>Protect your trip</h2>
+            <p>Unexpected illness, delays, or baggage issues can happen. Add travel protection for only €16.99.</p>
+            <div class="fake-ui">
+              <button class="btn primary" data-action="addProtection">Add protection</button>
+              <button class="link-button diagnosable" data-pattern="DP06">No thanks, I will risk my trip</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleFlightAction(event, action) {
+      event.stopPropagation();
+      if (action === "searchFlights") return goFlightPage("results");
+      if (action === "chooseFlight") return goFlightPage("fare");
+      if (action === "selectBasic") { state.booking.fare = "basic"; state.booking.baseFare = 68; return goFlightPage("passenger"); }
+      if (action === "selectStandard") { state.booking.fare = "standard"; state.booking.baseFare = 96; return goFlightPage("passenger"); }
+      if (action === "selectFlex") { state.booking.fare = "flex"; state.booking.baseFare = 145; return goFlightPage("passenger"); }
+      if (action === "continuePassenger") return goFlightPage("addons");
+      if (action === "openInsurance") { state.insuranceModal = true; return renderGame(); }
+      if (action === "closeInsurance") { state.insuranceModal = false; return renderGame(); }
+      if (action === "addProtection") { state.booking.addons.insurance = true; state.insuranceModal = false; return renderGame(); }
+      if (action === "continueToPayment") {
+        if (!state.booking.addons.insurance && !currentProgress().repaired.DP06) { state.insuranceModal = true; return renderGame(); }
+        return goFlightPage("payment");
+      }
+      if (action === "triggerObstruction") { state.obstructionActive = true; return renderGame(); }
+      if (action === "completeBooking") return goFlightPage("summary");
+      if (action === "finishFlightReport") return finishReport();
+      if (action.startsWith("toggleAddon:")) {
+        const key = action.split(":")[1];
+        state.booking.addons[key] = !state.booking.addons[key];
+        return renderGame();
+      }
+    }
+
+    function goFlightPage(id) {
+      const progress = currentProgress();
+      state.pageId = id;
+      progress.visited[state.pageId] = true;
+      state.selectedPatternId = "";
+      state.feedback = "";
+      state.insuranceModal = false;
+      if (id === "results") state.flightTimer = 600;
+      renderGame();
+    }
+
+    function startFlightTimer() {
+      if (state.timerHandle) return;
+      state.timerHandle = setInterval(() => {
+        if (state.pageId !== "results") return;
+        state.flightTimer = Math.max(0, state.flightTimer - 1);
+        renderFlightTimerText();
+      }, 1000);
+    }
+
+    function stopFlightTimer() {
+      if (state.timerHandle) clearInterval(state.timerHandle);
+      state.timerHandle = null;
+    }
+
+    function renderFlightTimerText() {
+      const node = el("flightTimerText");
+      if (node) node.textContent = formatTimer(state.flightTimer);
+    }
+
+    function formatTimer(seconds) {
+      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const sec = String(seconds % 60).padStart(2, "0");
+      return `${min}:${sec}`;
     }
 
     function renderSymptomNode(pattern, progress) {
@@ -1202,6 +1867,7 @@
           progress.found[pattern.id] = true;
           progress.repaired[pattern.id] = true;
           progress.score += 10 + (progress.attempts[pattern.id] === 1 ? 3 : 0);
+          if (scenario.id === "flight") applyFlightCure(pattern.id);
         }
         state.feedback = `
           <div class="feedback good">
@@ -1221,6 +1887,23 @@
         state.feedback = `<div class="feedback bad"><h3>Not quite.</h3><p>${reason}</p><p>Try again. The symptom is still active.</p></div>`;
         renderDiagnosis();
         renderToolbar();
+      }
+    }
+
+    function applyFlightCure(id) {
+      if (id === "DP05") {
+        Object.keys(state.booking.addons).forEach(key => {
+          state.booking.addons[key] = false;
+        });
+      }
+      if (id === "DP06") {
+        state.insuranceModal = false;
+      }
+      if (id === "DP07") {
+        state.booking.paymentFeesVisible = true;
+      }
+      if (id === "DP08") {
+        state.obstructionActive = false;
       }
     }
 
