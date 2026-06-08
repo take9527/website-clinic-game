@@ -700,6 +700,138 @@
       cursor: pointer;
     }
 
+    .flight-fullscreen-mode .app-frame {
+      width: 100%;
+      padding: 0;
+    }
+
+    .flight-fullscreen-mode .clinic-top,
+    .flight-fullscreen-mode aside {
+      display: none;
+    }
+
+    .flight-fullscreen-mode .game-grid {
+      display: block;
+    }
+
+    .flight-fullscreen-mode .game-panel {
+      min-height: 100vh;
+      border: 0;
+      border-radius: 0;
+      background: #f6f8fb;
+      box-shadow: none;
+    }
+
+    .flight-fullscreen-mode .web-slice {
+      margin: 0;
+      min-height: 100vh;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .flight-fullscreen-mode .web-slice::before {
+      content: none;
+    }
+
+    .flight-fullscreen-mode .diagnosable:hover {
+      box-shadow: none;
+      transform: none;
+    }
+
+    .booking-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px clamp(16px, 4vw, 56px);
+      color: #17212b;
+      background: #fff;
+      border-bottom: 1px solid #dde6ee;
+    }
+
+    .booking-brand {
+      color: #104c8b;
+      font-size: 1.25rem;
+      font-weight: 950;
+    }
+
+    .booking-links {
+      display: flex;
+      gap: 20px;
+      color: #52606c;
+      font-weight: 800;
+    }
+
+    .booking-progress {
+      display: flex;
+      gap: 8px;
+      padding: 12px clamp(16px, 4vw, 56px);
+      overflow-x: auto;
+      background: #fdfefe;
+      border-bottom: 1px solid #dde6ee;
+    }
+
+    .progress-step {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #6b7785;
+      background: #edf1f5;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .progress-step.active {
+      color: #fff;
+      background: #2e8be8;
+    }
+
+    .booking-fullscreen-content {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px clamp(14px, 3vw, 28px) 34px;
+    }
+
+    .diagnosis-modal .modal-card {
+      width: min(760px, 100%);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 60;
+      right: 18px;
+      bottom: 18px;
+      max-width: 340px;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      color: #fff;
+      background: rgba(23, 33, 43, 0.94);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .toast.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cure-flash {
+      animation: cureFlash 900ms ease both;
+    }
+
+    @keyframes cureFlash {
+      0% { box-shadow: 0 0 0 0 rgba(155, 231, 192, 0); }
+      35% { box-shadow: 0 0 0 5px rgba(155, 231, 192, 0.45); }
+      100% { box-shadow: 0 0 0 0 rgba(155, 231, 192, 0); }
+    }
+
     .symptom-node {
       position: relative;
       min-height: 116px;
@@ -1027,6 +1159,12 @@
     </section>
   </div>
 
+  <div class="modal-backdrop diagnosis-modal" id="diagnosisModal">
+    <section class="modal-card" id="diagnosisModalCard"></section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
   <script>
     const categories = [
       "Nagging", "Obstruction", "Sneaking", "Interface Interference", "Forced Action",
@@ -1220,17 +1358,19 @@
       timerHandle: null,
       insuranceModal: false,
       obstructionActive: false,
+      obstructionStep: 0,
       booking: {
         fare: "standard",
         baseFare: 96,
         addons: {
-          cabinBag: true,
-          seat: true,
-          insurance: true,
-          sms: true,
-          carbon: true,
-          priority: true
+          cabinBag: false,
+          seat: false,
+          insurance: false,
+          sms: false,
+          carbon: false,
+          priority: false
         },
+        addonDefaultsApplied: false,
         paymentFeesVisible: false
       },
       progress: {}
@@ -1312,6 +1452,7 @@
 
     function renderGame() {
       const scenario = currentScenario();
+      el("gameScreen").classList.remove("flight-fullscreen-mode");
       if (scenario.id === "flight") {
         renderFlightGame();
         return;
@@ -1369,22 +1510,25 @@
       state.flightTimer = 600;
       state.insuranceModal = false;
       state.obstructionActive = false;
+      state.obstructionStep = 0;
       state.booking = {
         fare: "standard",
         baseFare: 96,
         addons: {
-          cabinBag: true,
-          seat: true,
-          insurance: true,
-          sms: true,
-          carbon: true,
-          priority: true
+          cabinBag: false,
+          seat: false,
+          insurance: false,
+          sms: false,
+          carbon: false,
+          priority: false
         },
+        addonDefaultsApplied: false,
         paymentFeesVisible: false
       };
     }
 
     function renderFlightGame() {
+      el("gameScreen").classList.add("flight-fullscreen-mode");
       const scenario = currentScenario();
       const pageData = scenario.pages.find(pg => pg.id === state.pageId);
       const progress = currentProgress();
@@ -1396,37 +1540,32 @@
       else stopFlightTimer();
 
       el("gamePanel").innerHTML = `
-        <div class="case-header">
-          <div>
-            <span class="kicker"><span class="status-dot"></span> Live Booking Simulation</span>
-            <h2>${pageData.title}</h2>
-            <p class="muted">${pageData.lead}</p>
-          </div>
-          <span class="chip green">Step ${scenario.pages.findIndex(pg => pg.id === state.pageId) + 1} / ${scenario.pages.length}</span>
+        <header class="booking-nav">
+          <div class="booking-brand">FlyFast Airlines</div>
+          <nav class="booking-links"><span>Flights</span><span>Manage Booking</span><span>Help</span><span>Login</span></nav>
+        </header>
+        <div class="booking-progress">
+          ${scenario.pages.map(pg => `<span class="progress-step ${pg.id === state.pageId ? "active" : ""}">${pg.title}</span>`).join("")}
         </div>
-        <nav class="page-nav">
-          ${scenario.pages.map(pg => `<button class="page-tab ${pg.id === state.pageId ? "active" : ""}" data-flight-page="${pg.id}">${pg.title}</button>`).join("")}
-        </nav>
         <section class="web-slice booking-site">
           ${renderFlightPage()}
         </section>
         ${renderInsuranceModal()}
       `;
 
-      document.querySelectorAll("[data-flight-page]").forEach(button => button.addEventListener("click", () => goFlightPage(button.dataset.flightPage)));
       document.querySelectorAll("[data-pattern]").forEach(node => node.addEventListener("click", event => {
         event.stopPropagation();
         openPattern(node.dataset.pattern);
       }));
-      document.querySelectorAll("[data-action]").forEach(node => node.addEventListener("click", event => handleFlightAction(event, node.dataset.action)));
+      document.querySelectorAll("[data-action]").forEach(node => {
+        if (node.tagName !== "INPUT") node.addEventListener("click", event => handleFlightAction(event, node.dataset.action));
+      });
+      document.querySelectorAll("input[data-action]").forEach(node => node.addEventListener("change", event => handleFlightAction(event, node.dataset.action)));
       document.querySelector(".booking-site")?.addEventListener("click", event => {
         if (!event.target.closest("[data-pattern]") && !event.target.closest("[data-action]")) {
-          state.feedback = "No clear symptom found here. Keep inspecting the booking flow.";
-          renderDiagnosis();
+          showToast("No clear symptom found. Keep inspecting the booking flow.");
         }
       });
-      renderToolbar();
-      renderDiagnosis();
       renderFlightTimerText();
     }
 
@@ -1443,8 +1582,7 @@
       }[state.pageId]();
 
       return `
-        ${state.pageId === "search" ? "" : `<div class="mock-top"><strong>FlyFast Airlines</strong><span class="booking-pill soft">Booking ref pending</span></div>`}
-        <div class="booking-content">
+        <div class="booking-fullscreen-content">
           ${withSummary ? `<div class="booking-layout"><div>${content}</div>${renderPriceSummary()}</div>` : content}
         </div>
       `;
@@ -1593,13 +1731,39 @@
           </div>
           <div class="payment-card ${state.obstructionActive ? "diagnosable" : ""}" ${state.obstructionActive ? "data-pattern=\"DP08\"" : ""}>
             <h3>Need to change something?</h3>
-            <p class="muted">${state.obstructionActive ? "To remove insurance, confirm this change, reopen add-ons, and review the fare again." : "You can review your services before paying."}</p>
-            <div class="fake-ui">
-              <button class="btn" data-action="triggerObstruction">Remove insurance</button>
-              <button class="btn ghost" data-action="triggerObstruction">Back to add-ons</button>
-              <button class="btn primary" data-action="completeBooking">Pay now</button>
-            </div>
+            ${renderObstructionFlow()}
           </div>
+        </div>
+      `;
+    }
+
+    function renderObstructionFlow() {
+      if (!state.obstructionActive) {
+        return `
+          <p class="muted">You can review your services before paying.</p>
+          <div class="fake-ui">
+            <button class="btn" data-action="triggerObstruction">Remove insurance</button>
+            <button class="btn ghost" data-action="triggerObstruction">Back to add-ons</button>
+            <button class="btn primary" data-action="completeBooking">Pay now</button>
+          </div>
+        `;
+      }
+      if (currentProgress().repaired.DP08) {
+        return `
+          <p class="muted">Services can be edited directly.</p>
+          <div class="fake-ui"><button class="btn" data-action="removeInsuranceDirect">Remove insurance</button><button class="btn primary" data-action="completeBooking">Pay now</button></div>
+        `;
+      }
+      const copy = [
+        "Are you sure you want to change your protection? You may lose support for delays and baggage issues.",
+        "Before removing protection, review this reminder and confirm you still want to continue.",
+        "Removal is almost complete. Open add-ons again to finish the change."
+      ][state.obstructionStep] || "Open add-ons again to finish the change.";
+      return `
+        <p class="muted">${copy}</p>
+        <div class="fake-ui">
+          <button class="btn" data-action="obstructionNext">${state.obstructionStep < 2 ? "Continue removal" : "Open add-ons to remove"}</button>
+          <button class="btn primary" data-action="completeBooking">Keep and pay now</button>
         </div>
       `;
     }
@@ -1683,6 +1847,20 @@
         return goFlightPage("payment");
       }
       if (action === "triggerObstruction") { state.obstructionActive = true; return renderGame(); }
+      if (action === "obstructionNext") {
+        if (state.obstructionStep < 2) {
+          state.obstructionStep += 1;
+          return renderGame();
+        }
+        state.booking.addons.insurance = false;
+        state.obstructionActive = false;
+        state.obstructionStep = 0;
+        return goFlightPage("addons");
+      }
+      if (action === "removeInsuranceDirect") {
+        state.booking.addons.insurance = false;
+        return renderGame();
+      }
       if (action === "completeBooking") return goFlightPage("summary");
       if (action === "finishFlightReport") return finishReport();
       if (action.startsWith("toggleAddon:")) {
@@ -1700,6 +1878,12 @@
       state.feedback = "";
       state.insuranceModal = false;
       if (id === "results") state.flightTimer = 600;
+      if (id === "addons" && !state.booking.addonDefaultsApplied && !currentProgress().repaired.DP05) {
+        Object.keys(state.booking.addons).forEach(key => {
+          state.booking.addons[key] = true;
+        });
+        state.booking.addonDefaultsApplied = true;
+      }
       renderGame();
     }
 
@@ -1726,6 +1910,15 @@
       const min = String(Math.floor(seconds / 60)).padStart(2, "0");
       const sec = String(seconds % 60).padStart(2, "0");
       return `${min}:${sec}`;
+    }
+
+    let toastTimer = null;
+    function showToast(message) {
+      const toast = el("toast");
+      toast.textContent = message;
+      toast.classList.add("active");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("active"), 1800);
     }
 
     function renderSymptomNode(pattern, progress) {
@@ -1775,6 +1968,10 @@
     }
 
     function openPattern(id) {
+      if (currentScenario()?.id === "flight") {
+        openFlightDiagnosis(id);
+        return;
+      }
       if (!state.inspect) {
         state.feedback = "Inspect Mode is off. Turn it on to examine suspicious elements.";
         renderDiagnosis();
@@ -1786,6 +1983,106 @@
       state.selectedRepair = "";
       state.feedback = "";
       renderDiagnosis();
+    }
+
+    function openFlightDiagnosis(id) {
+      state.selectedPatternId = id;
+      state.selectedType = "";
+      state.selectedHarm = "";
+      state.selectedRepair = "";
+      state.feedback = "";
+      renderFlightDiagnosisModal("form");
+      el("diagnosisModal").classList.add("active");
+    }
+
+    function renderFlightDiagnosisModal(mode) {
+      const scenario = currentScenario();
+      const pattern = scenario.patterns.find(pat => pat.id === state.selectedPatternId);
+      if (!pattern) return;
+
+      if (mode === "success") {
+        el("diagnosisModalCard").innerHTML = `
+          <span class="kicker"><span class="status-dot"></span> Website Clinic</span>
+          <h2>Diagnosis confirmed: ${pattern.patternName}</h2>
+          <div class="feedback good">
+            <p><strong>Why it is harmful:</strong><br>${pattern.whyItIsDark}</p>
+            <p><strong>Ethical repair:</strong><br>${pattern.correctRepair}</p>
+            ${researchBlock(pattern)}
+          </div>
+          <button class="btn primary" id="closeDiagnosisSuccess">Continue booking</button>
+        `;
+        el("closeDiagnosisSuccess").addEventListener("click", () => {
+          el("diagnosisModal").classList.remove("active");
+          state.selectedPatternId = "";
+          renderFlightGame();
+        });
+        return;
+      }
+
+      const typeOptions = shuffleUnique([pattern.category, pattern.patternName, "Hidden Costs", "Preselection", "Confirmshaming", "Fake Urgency", "Fake Scarcity", "Social Proof", "Obstruction", "Interface Interference"]).slice(0, 5);
+      const repairOptions = shuffleUnique([pattern.correctRepair, ...pattern.wrongRepairs]).slice(0, 3);
+      el("diagnosisModalCard").innerHTML = `
+        <span class="kicker"><span class="status-dot"></span> Interface Diagnosis</span>
+        <h2>You selected a suspicious interface element.</h2>
+        <p class="muted">Complete the diagnosis before the interface can be repaired.</p>
+        <div class="field">
+          <label>What kind of deceptive design is this?</label>
+          <div class="choice-list">${typeOptions.map(option => choice("type", option)).join("")}</div>
+        </div>
+        <div class="field">
+          <label>Why is it harmful?</label>
+          <div class="choice-list">${harmOptions.map(option => choice("harm", option)).join("")}</div>
+        </div>
+        <div class="field">
+          <label>How would you cure it?</label>
+          <div class="choice-list">${repairOptions.map(option => choice("repair", option)).join("")}</div>
+        </div>
+        <div id="flightDiagnosisFeedback"></div>
+        <div class="fake-ui">
+          <button class="btn primary" id="submitFlightDiagnosis">Submit Diagnosis</button>
+          <button class="btn ghost" id="cancelFlightDiagnosis">Close</button>
+        </div>
+      `;
+      el("diagnosisModalCard").querySelectorAll("[data-choice]").forEach(button => button.addEventListener("click", () => {
+        const field = button.dataset.choice;
+        if (field === "type") state.selectedType = button.dataset.value;
+        if (field === "harm") state.selectedHarm = button.dataset.value;
+        if (field === "repair") state.selectedRepair = button.dataset.value;
+        button.parentElement.querySelectorAll(".choice").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+      }));
+      el("submitFlightDiagnosis").addEventListener("click", submitFlightDiagnosis);
+      el("cancelFlightDiagnosis").addEventListener("click", () => el("diagnosisModal").classList.remove("active"));
+    }
+
+    function submitFlightDiagnosis() {
+      const scenario = currentScenario();
+      const pattern = scenario.patterns.find(pat => pat.id === state.selectedPatternId);
+      const progress = currentProgress();
+      progress.attempts[pattern.id] = (progress.attempts[pattern.id] || 0) + 1;
+
+      if (!state.selectedType || !state.selectedHarm || !state.selectedRepair) {
+        el("flightDiagnosisFeedback").innerHTML = `<div class="feedback warn"><strong>Incomplete diagnosis.</strong><p>Select all three answers before submitting.</p></div>`;
+        return;
+      }
+
+      const typeOk = state.selectedType === pattern.category || state.selectedType === pattern.patternName;
+      const harmOk = state.selectedHarm === pattern.userHarm;
+      const repairOk = state.selectedRepair === pattern.correctRepair;
+
+      if (typeOk && harmOk && repairOk) {
+        if (!progress.repaired[pattern.id]) {
+          progress.found[pattern.id] = true;
+          progress.repaired[pattern.id] = true;
+          progress.score += 10 + (progress.attempts[pattern.id] === 1 ? 3 : 0);
+          applyFlightCure(pattern.id);
+        }
+        renderFlightDiagnosisModal("success");
+      } else {
+        progress.found[pattern.id] = true;
+        progress.score = Math.max(0, progress.score - 1);
+        el("flightDiagnosisFeedback").innerHTML = `<div class="feedback bad"><h3>Not quite.</h3><p>Try again. Think about how this element affects the user's decision.</p></div>`;
+      }
     }
 
     function renderDiagnosis() {
@@ -1895,6 +2192,7 @@
         Object.keys(state.booking.addons).forEach(key => {
           state.booking.addons[key] = false;
         });
+        state.booking.addonDefaultsApplied = true;
       }
       if (id === "DP06") {
         state.insuranceModal = false;
@@ -1904,6 +2202,7 @@
       }
       if (id === "DP08") {
         state.obstructionActive = false;
+        state.obstructionStep = 0;
       }
     }
 
