@@ -249,6 +249,27 @@
     }
 
     .case-card:hover { border-color: rgba(155, 231, 192, 0.72); transform: translateY(-2px); }
+    .case-card.locked {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .case-card.locked:hover {
+      border-color: var(--border);
+      transform: none;
+    }
+
+    .lock-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.04);
+      font-size: 1.3rem;
+    }
     .case-card::after {
       content: "";
       position: absolute;
@@ -705,16 +726,25 @@
       padding: 0;
     }
 
+    .ecommerce-fullscreen-mode .app-frame {
+      width: 100%;
+      padding: 0;
+    }
+
     .flight-fullscreen-mode .clinic-top,
-    .flight-fullscreen-mode aside {
+    .flight-fullscreen-mode aside,
+    .ecommerce-fullscreen-mode .clinic-top,
+    .ecommerce-fullscreen-mode aside {
       display: none;
     }
 
-    .flight-fullscreen-mode .game-grid {
+    .flight-fullscreen-mode .game-grid,
+    .ecommerce-fullscreen-mode .game-grid {
       display: block;
     }
 
-    .flight-fullscreen-mode .game-panel {
+    .flight-fullscreen-mode .game-panel,
+    .ecommerce-fullscreen-mode .game-panel {
       min-height: 100vh;
       border: 0;
       border-radius: 0;
@@ -734,7 +764,20 @@
       content: none;
     }
 
-    .flight-fullscreen-mode .diagnosable:hover {
+    .ecommerce-fullscreen-mode .web-slice {
+      margin: 0;
+      min-height: 100vh;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .ecommerce-fullscreen-mode .web-slice::before {
+      content: none;
+    }
+
+    .flight-fullscreen-mode .diagnosable:hover,
+    .ecommerce-fullscreen-mode .diagnosable:hover {
       box-shadow: none;
       transform: none;
     }
@@ -794,6 +837,224 @@
       max-width: 1180px;
       margin: 0 auto;
       padding: 22px clamp(14px, 3vw, 28px) 34px;
+    }
+
+    .market-site {
+      min-height: 100vh;
+      background: #f7f8f4;
+      color: #1d2a22;
+    }
+
+    .market-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px clamp(16px, 4vw, 56px);
+      border-bottom: 1px solid #dfe6d8;
+      background: #fff;
+    }
+
+    .market-brand {
+      color: #2f8f5b;
+      font-size: 1.25rem;
+      font-weight: 950;
+    }
+
+    .market-search {
+      flex: 1;
+      max-width: 480px;
+      border: 1px solid #d7dfd2;
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: #657266;
+      background: #f7faf5;
+    }
+
+    .market-links {
+      display: flex;
+      gap: 18px;
+      color: #5b675f;
+      font-weight: 800;
+    }
+
+    .market-progress {
+      display: flex;
+      gap: 8px;
+      padding: 12px clamp(16px, 4vw, 56px);
+      overflow-x: auto;
+      border-bottom: 1px solid #dfe6d8;
+      background: #fbfcf8;
+    }
+
+    .market-step {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #647166;
+      background: #e9efe5;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .market-step.active {
+      color: #fff;
+      background: #2f8f5b;
+    }
+
+    .market-content {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px clamp(14px, 3vw, 28px) 34px;
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .market-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .product-card, .market-card, .market-summary, .delivery-card {
+      border: 1px solid #dfe6d8;
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fff;
+    }
+
+    .product-image {
+      display: grid;
+      height: 150px;
+      place-items: center;
+      border-radius: var(--radius);
+      color: #2f8f5b;
+      background: linear-gradient(135deg, #e6f4ea, #fff4d6);
+      font-weight: 950;
+    }
+
+    .market-price {
+      font-size: 1.55rem;
+      font-weight: 950;
+    }
+
+    .market-pill {
+      display: inline-flex;
+      min-height: 25px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #36513f;
+      background: #e9f3ea;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .market-pill.warm {
+      color: #66410a;
+      background: #fff0c9;
+    }
+
+    .deal-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: var(--radius);
+      margin: 12px 0;
+      padding: 10px 12px;
+      color: #2a432f;
+      background: #e5f4e9;
+      font-weight: 850;
+    }
+
+    .deal-strip strong {
+      font-variant-numeric: tabular-nums;
+      font-size: 1.08rem;
+    }
+
+    .cart-line, .market-summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #edf1ea;
+      padding: 9px 0;
+      color: #5e6b63;
+    }
+
+    .cart-line:last-child, .market-summary-row:last-child {
+      border-bottom: 0;
+    }
+
+    .market-summary {
+      position: sticky;
+      top: 14px;
+    }
+
+    .market-summary-row.total {
+      color: #1d2a22;
+      font-size: 1.1rem;
+      font-weight: 950;
+    }
+
+    .market-modal, .compare-drawer {
+      position: fixed;
+      z-index: 45;
+      display: none;
+      background: rgba(0,0,0,0.45);
+    }
+
+    .market-modal.active {
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .coupon-card {
+      width: min(430px, 100%);
+      border-radius: var(--radius);
+      padding: 18px;
+      color: #1d2a22;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .compare-drawer.active {
+      inset: 0;
+      display: block;
+    }
+
+    .drawer-panel {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: min(560px, 100%);
+      height: 100%;
+      overflow: auto;
+      padding: 18px;
+      color: #1d2a22;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .comparison-table {
+      min-width: 620px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th, .comparison-table td {
+      border-bottom: 1px solid #e4ebe0;
+      padding: 10px;
+      text-align: left;
     }
 
     .diagnosis-modal .modal-card {
@@ -1208,6 +1469,7 @@
       {
         id: "flight",
         title: "FlyFast Airlines",
+        status: "available",
         subtitle: "Complete Your Booking",
         difficulty: "Easy",
         caseBrief: "A low-cost airline flow nudges users through pressure, defaults, hidden fees, and hard-to-change add-ons.",
@@ -1235,34 +1497,34 @@
       {
         id: "ecommerce",
         title: "Everyday Market",
+        status: "available",
         subtitle: "Household Goods Checkout",
         difficulty: "Easy to Medium",
         caseBrief: "An online shop uses coupon pressure, default add-ons, comparison blockers, and late fees.",
         visualTheme: "Retail checkout slice",
         pages: [
-          page("home", "Search Results", "listing", "Product cards and filters look helpful, but comparison is strained.", ["Product cards", "Filters", "Compare buttons"]),
-          page("detail", "Product Detail", "detail", "Stock and viewers are used as pressure signals.", ["Product image", "Inventory label", "Reviews"]),
-          page("coupon", "Coupon Modal", "modal", "A coupon pop-up interrupts shopping with loaded refusal copy.", ["Email field", "Timer", "Decline link"]),
-          page("compare", "Comparison Drawer", "drawer", "Bundles are named differently, and unit prices are absent.", ["Bundle table", "SKU names", "Hidden unit price"]),
+          page("home", "Product Listing", "listing", "Browse household goods and compare products.", ["Product cards", "Filters", "Compare buttons"]),
+          page("detail", "Product Detail", "detail", "Review product details and add the item to cart.", ["Product image", "Stock signal", "Viewer count"]),
           page("cart", "Cart", "cart", "The basket contains more than the user added.", ["Cart rows", "Donation line", "Coupon code"]),
           page("delivery", "Delivery & Add-ons", "form", "Delivery choices and optional services are weighted unevenly.", ["Shipping cards", "Insurance checkbox", "SMS notification"]),
           page("payment", "Payment", "payment", "The final payment screen adds a platform fee.", ["Fee summary", "Payment method", "Submit order"]),
-          page("order", "Order Detail", "settings", "Preference and return settings are hard to adjust.", ["Order receipt", "Returns", "Marketing preferences"])
+          page("order", "Order Complete", "summary", "View the confirmed order and diagnosis report.", ["Order number", "Delivery estimate", "Total paid"])
         ],
         patterns: [
-          p("E1", "coupon", "Confirmshaming Coupon", "Confirmshaming", "obvious", "The refusal says No, I want to pay full price.", "The copy shames the user for declining a marketing request.", "It makes refusal emotionally difficult.", "Use neutral copy such as Not now or Continue without coupon.", ["Make the refusal link gray.", "Ask for email before showing refusal."], "Is refusal neutral or emotionally loaded?", ["deceptive"]),
-          p("E2", "detail", "Fake Urgency", "Urgency", "obvious", "A timer says order within 15 minutes or the price rises.", "The timer creates unverified pressure.", "It pressures users with unverifiable claims.", "Show only real promotion end times that do not reset.", ["Restart the timer at checkout.", "Add louder warning copy."], "Does the timer represent a real promotion?", ["mathur"]),
-          p("E3", "detail", "Fake Scarcity", "Scarcity", "medium", "Only 2 left and 34 people viewing stay constant.", "Stock and viewer counts are used without evidence.", "It pressures users with unverifiable claims.", "Remove fake stock claims or disclose source and update time.", ["Add a red icon.", "Hide it under reviews."], "Could this number be audited?", ["mathur", "oecd"]),
+          p("E1", "detail", "Confirmshaming Coupon", "Confirmshaming", "obvious", "The coupon refusal says No, I want to pay full price.", "The copy shames the user for declining a marketing request.", "It makes refusal emotionally difficult.", "Use neutral refusal copy such as No thanks.", ["Make the refusal link smaller.", "Require email before closing."], "Is the decline option neutral, or does it judge the user?", ["deceptive"]),
+          p("E2", "detail", "Fake Urgency", "Urgency", "obvious", "A deal countdown reserves the price but resets when the product page is re-entered.", "The countdown pressures users without a reliable promotion deadline.", "It pressures users with unverifiable claims.", "Only show real promotion deadlines that do not reset.", ["Make the countdown larger.", "Restart the timer in the cart."], "Does the deal timer behave like a real deadline?", ["mathur"]),
+          p("E3", "detail", "Fake Scarcity / Fake Social Proof", "Scarcity", "medium", "Only 2 left in stock and 34 people are viewing this item appear without a source.", "Unverified stock and viewer claims create pressure.", "It pressures users with unverifiable claims.", "Only show verifiable stock and viewer data with a clear source.", ["Animate the viewer count faster.", "Move the source to legal terms."], "Can the user verify the stock or viewer data?", ["mathur", "oecd"]),
           p("E4", "cart", "Sneak into Basket", "Sneaking", "medium", "Eco packaging and a donation are automatically added.", "The basket changes without user intent.", "It hides key information.", "Optional add-ons should start unchecked and be added only by active opt-in.", ["Make the add-on cheaper.", "Explain it after payment."], "Who added this line item?", ["gray"]),
-          p("E5", "delivery", "Preselected Add-ons", "Preselection", "obvious", "Shipping insurance, SMS alerts, and marketing signup are checked by default.", "Defaults favor the platform and create passive consent.", "It collects unnecessary data.", "Default optional services to off and let users actively choose.", ["Keep marketing checked.", "Hide settings in order detail."], "Which boxes are checked before the user acts?", ["deceptive", "oecd"]),
-          p("E6", "payment", "Hidden Platform Fee", "Hidden Costs", "medium", "A service fee appears only on the payment page.", "Mandatory costs are delayed.", "It hides key information.", "Show complete total, including platform fees, in the cart.", ["Rename it convenience support.", "Show it only after card entry."], "When is the first complete price shown?", ["ftc"]),
-          p("E7", "delivery", "Delivery Visual Interference", "Interface Interference", "medium", "Express delivery is a large green button, standard delivery is gray text.", "Visual weight steers the user toward the expensive option.", "It makes comparison or reversal harder.", "Display delivery options as equal cards with price and timing.", ["Hide standard delivery.", "Preselect express delivery."], "Which delivery choice looks like the primary action?", ["gray", "nng"]),
-          p("E8", "compare", "Comparison Prevention", "Comparison Prevention", "subtle", "Bundles use inconsistent names and omit unit price.", "The interface prevents fair comparison.", "It makes comparison or reversal harder.", "Show unit prices and a unified comparison table.", ["Add more bundle names.", "Move unit price to FAQ."], "Can the user compare the same unit across options?", ["mathur"])
+          p("E5", "delivery", "Preselected Add-ons", "Preselection", "medium", "Shipping insurance, SMS tracking, and marketing emails are checked by default.", "Defaults turn passive continuation into consent.", "It collects unnecessary data.", "Paid and marketing options should default to off.", ["Keep defaults but add small print.", "Put opt-out in account settings."], "Which options are checked before the user chooses them?", ["deceptive", "oecd"]),
+          p("E6", "payment", "Hidden Platform Fee", "Hidden Costs", "subtle", "Platform and handling fees appear only on the payment page.", "Mandatory costs are delayed until the last step.", "It hides key information.", "Show the complete price in the cart before checkout.", ["Rename the fees.", "Show fees after card submission."], "Compare the cart total with the payment total.", ["ftc"]),
+          p("E7", "delivery", "Delivery Visual Interference", "Interface Interference", "medium", "Express Delivery is a large recommended green card while Standard Delivery is a small gray text path.", "Visual hierarchy steers users toward a more expensive delivery option.", "It makes comparison or reversal harder.", "Present delivery options with balanced visual weight.", ["Hide standard delivery.", "Preselect express delivery."], "Which delivery option looks like the intended path?", ["gray", "nng"]),
+          p("E8", "home", "Comparison Prevention", "Comparison Prevention", "subtle", "The comparison drawer uses inconsistent bundle names and hides unit price.", "The interface makes fair comparison difficult.", "It makes comparison or reversal harder.", "Show unit price and a unified comparison table.", ["Add more bundle labels.", "Move unit price into FAQ."], "Can the user compare price per unit?", ["mathur"])
         ]
       },
       {
         id: "subscription",
         title: "FitStream Club",
+        status: "locked",
         subtitle: "Trial and Billing Flow",
         difficulty: "Medium",
         caseBrief: "A fitness subscription makes trial signup easy and cancellation slow, emotional, and asymmetric.",
@@ -1291,6 +1553,7 @@
       {
         id: "social",
         title: "LoopLink Social",
+        status: "locked",
         subtitle: "Registration and Privacy Flow",
         difficulty: "Medium to Hard",
         caseBrief: "A social platform collects extra data through contact sync, privacy defaults, repeated prompts, and deletion friction.",
@@ -1319,6 +1582,7 @@
       {
         id: "health",
         title: "CareNow Clinic",
+        status: "locked",
         subtitle: "Online Appointment Flow",
         difficulty: "Hard",
         caseBrief: "A sensitive healthcare appointment flow combines emotional steering, bundled consent, hidden information, and rights obstruction.",
@@ -1377,6 +1641,22 @@
         addonDefaultsApplied: false,
         paymentFeesVisible: false
       },
+      ecommerceTimer: 900,
+      ecommerceTimerHandle: null,
+      couponModal: false,
+      compareDrawer: false,
+      couponShown: false,
+      ecommerce: {
+        productAdded: false,
+        deliveryDefaultsApplied: false,
+        delivery: "express",
+        addOns: {
+          shippingInsurance: false,
+          smsTracking: false,
+          marketing: false
+        },
+        paymentFeesVisible: false
+      },
       progress: {}
     };
 
@@ -1419,6 +1699,18 @@
         const total = scenario.patterns.length;
         const pct = Math.round(repaired / total * 100);
         const risk = scenario.difficulty.includes("Hard") ? "red" : scenario.difficulty.includes("Medium") ? "yellow" : "green";
+        if (scenario.status === "locked") {
+          return `
+            <button class="case-card locked" disabled>
+              <div class="lock-icon">🔒</div>
+              <span class="kicker">Case #${String(index + 1).padStart(2, "0")}</span>
+              <h3>${scenario.title}</h3>
+              <p class="muted">${scenario.subtitle}</p>
+              <div class="case-meta"><span class="chip">Coming Soon</span><span class="chip ${risk}">${scenario.difficulty}</span></div>
+              <p class="muted">This case is still locked.</p>
+            </button>
+          `;
+        }
         return `
           <button class="case-card" data-case="${scenario.id}">
             <span class="kicker"><span class="status-dot"></span> Case #${String(index + 1).padStart(2, "0")}</span>
@@ -1450,6 +1742,7 @@
       state.feedback = "";
       state.hintsLeft = 3;
       if (id === "flight") resetFlightBooking();
+      if (id === "ecommerce") resetEcommerce();
       renderGame();
       showScreen("gameScreen");
     }
@@ -1457,8 +1750,13 @@
     function renderGame() {
       const scenario = currentScenario();
       el("gameScreen").classList.remove("flight-fullscreen-mode");
+      el("gameScreen").classList.remove("ecommerce-fullscreen-mode");
       if (scenario.id === "flight") {
         renderFlightGame();
+        return;
+      }
+      if (scenario.id === "ecommerce") {
+        renderEcommerceGame();
         return;
       }
       const pageData = scenario.pages.find(pg => pg.id === state.pageId);
@@ -1916,6 +2214,347 @@
       return `${min}:${sec}`;
     }
 
+    function resetEcommerce() {
+      stopEcommerceTimer();
+      state.ecommerceTimer = 900;
+      state.couponModal = false;
+      state.compareDrawer = false;
+      state.couponShown = false;
+      state.ecommerce = {
+        productAdded: false,
+        deliveryDefaultsApplied: false,
+        delivery: "express",
+        addOns: {
+          shippingInsurance: false,
+          smsTracking: false,
+          marketing: false
+        },
+        paymentFeesVisible: false
+      };
+    }
+
+    function renderEcommerceGame() {
+      el("gameScreen").classList.add("ecommerce-fullscreen-mode");
+      const scenario = currentScenario();
+      const pageData = scenario.pages.find(pg => pg.id === state.pageId);
+      el("caseKicker").textContent = "CASE #02 / ECOMMERCE CHECKOUT";
+      el("caseTitle").textContent = "Everyday Market";
+      el("caseBrief").textContent = "Shop normally. Diagnosis only appears after selecting a suspicious interface element.";
+
+      if (state.pageId === "detail") startEcommerceTimer();
+      else stopEcommerceTimer();
+
+      el("gamePanel").innerHTML = `
+        <section class="web-slice market-site">
+          <header class="market-nav">
+            <div class="market-brand">Everyday Market</div>
+            <div class="market-search">Search towels, cleaners, kitchen goods...</div>
+            <nav class="market-links"><span>Categories</span><span>Deals</span><span>Orders</span><span>Cart</span><span>Account</span></nav>
+          </header>
+          <div class="market-progress">
+            ${scenario.pages.map(pg => `<span class="market-step ${pg.id === state.pageId ? "active" : ""}">${pg.title}</span>`).join("")}
+          </div>
+          <div class="market-content">${renderEcommercePage()}</div>
+          ${renderCouponModal()}
+          ${renderCompareDrawer()}
+        </section>
+      `;
+
+      document.querySelectorAll("[data-pattern]").forEach(node => node.addEventListener("click", event => {
+        event.stopPropagation();
+        openPattern(node.dataset.pattern);
+      }));
+      document.querySelectorAll("[data-action]").forEach(node => {
+        if (node.tagName !== "INPUT") node.addEventListener("click", event => handleEcommerceAction(event, node.dataset.action));
+      });
+      document.querySelectorAll("input[data-action]").forEach(node => node.addEventListener("change", event => handleEcommerceAction(event, node.dataset.action)));
+      document.querySelector(".market-site")?.addEventListener("click", event => {
+        if (!event.target.closest("[data-pattern]") && !event.target.closest("[data-action]")) {
+          showToast("No symptom detected here. This element appears clinically normal.");
+        }
+      });
+      renderEcommerceTimerText();
+    }
+
+    function renderEcommercePage() {
+      return ({
+        home: renderMarketListing,
+        detail: renderProductDetail,
+        cart: renderCart,
+        delivery: renderDelivery,
+        payment: renderMarketPayment,
+        order: renderOrderComplete
+      })[state.pageId]();
+    }
+
+    function renderMarketListing() {
+      return `
+        <div class="market-card">
+          <h2>Household essentials</h2>
+          <p class="muted">Sort by Recommended · Filter: In stock · Delivery this week</p>
+        </div>
+        <div class="market-grid">
+          ${[
+            ["CloudSoft Bath Tissue", "4.7 ★", "€15.99", "Arrives Fri"],
+            ["BrightHome Laundry Pods", "4.6 ★", "€12.49", "Arrives Thu"],
+            ["KitchenPro Sponge Pack", "4.5 ★", "€8.99", "Arrives Sat"]
+          ].map((item, index) => `
+            <article class="product-card">
+              <div class="product-image">${index === 0 ? "24 rolls" : "Product"}</div>
+              <h3>${item[0]}</h3>
+              <p class="muted">${item[1]} · ${item[3]}</p>
+              <div class="market-price">${item[2]}</div>
+              <div class="fake-ui">
+                <button class="btn primary" data-action="${index === 0 ? "viewProduct" : "normalClick"}">Add to cart</button>
+                <button class="btn" data-action="openCompare">Compare</button>
+              </div>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderProductDetail() {
+      const curedUrgency = currentProgress().repaired.E2;
+      const curedPressure = currentProgress().repaired.E3;
+      return `
+        <div class="market-layout">
+          <div>
+            <div class="market-card">
+              <div class="product-image" style="height:260px">CloudSoft 24 Roll Pack</div>
+            </div>
+            <div class="market-card" style="margin-top:14px">
+              <h2>CloudSoft Bath Tissue, 24 rolls</h2>
+              <p class="muted">4.7 ★ · 2,418 reviews · Household paper</p>
+              <div class="market-price">€15.99</div>
+              ${curedUrgency ? `<div class="deal-strip"><span>Current deal is shown with no artificial countdown.</span></div>` : `<div class="deal-strip diagnosable" data-pattern="E2"><span>Deal reserved for <strong id="marketTimerText">${formatTimer(state.ecommerceTimer)}</strong></span><span>Price may increase when the timer ends.</span></div>`}
+              ${curedPressure ? `<p><span class="market-pill">Availability confirmed at checkout</span></p>` : `<p><span class="market-pill warm diagnosable" data-pattern="E3">Only 2 left in stock</span> <span class="market-pill diagnosable" data-pattern="E3">${34 + (state.ecommerceTimer % 4)} people are viewing this item</span></p>`}
+              <p>Soft 3-ply tissue for everyday use. Includes 24 rolls in compact recyclable packaging.</p>
+              <div class="fake-ui"><button class="btn primary" data-action="addProduct">Add to cart</button><button class="btn" data-action="openCompare">Compare bundles</button></div>
+            </div>
+          </div>
+          ${renderMarketSummary()}
+        </div>
+      `;
+    }
+
+    function renderCouponModal() {
+      return `
+        <div class="market-modal ${state.couponModal ? "active" : ""}">
+          <div class="coupon-card">
+            <button class="link-button" style="float:right" data-action="closeCoupon">close</button>
+            <h2>Get 10% off your first order</h2>
+            <p>Enter your email to unlock your coupon.</p>
+            <div class="form-field"><strong>Email</strong><span>you@example.com</span></div>
+            <div class="fake-ui" style="margin-top:12px">
+              <button class="btn primary" data-action="acceptCoupon">Get my discount</button>
+              <button class="link-button diagnosable" data-pattern="E1">No, I want to pay full price</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCompareDrawer() {
+      return `
+        <div class="compare-drawer ${state.compareDrawer ? "active" : ""}">
+          <div class="drawer-panel">
+            <button class="link-button" style="float:right" data-action="closeCompare">close</button>
+            <h2>Compare bundles</h2>
+            <p class="muted">Swipe sideways to compare bundle options.</p>
+            <div style="overflow-x:auto" class="diagnosable" data-pattern="E8">
+              <table class="comparison-table">
+                <thead><tr><th>Bundle</th><th>Contents</th><th>Price</th><th>Delivery</th></tr></thead>
+                <tbody>
+                  <tr><td>Starter Pack</td><td>24 rolls</td><td>€15.99</td><td>Friday</td></tr>
+                  <tr><td>Family Value Pack</td><td>36 rolls</td><td>€23.99</td><td>Friday</td></tr>
+                  <tr><td>Smart Saver Bundle</td><td>Mega bundle</td><td>€31.99</td><td>Monday</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fake-ui"><button class="btn primary" data-action="viewProduct">Choose Starter Pack</button></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCart() {
+      const cured = currentProgress().repaired.E4;
+      return `
+        <div class="market-layout">
+          <div class="market-card">
+            <h2>Your cart</h2>
+            <div class="cart-line"><span>CloudSoft Bath Tissue · Qty 1</span><strong>€15.99</strong></div>
+            ${cured ? "" : `<div class="cart-line diagnosable" data-pattern="E4"><span>Eco Packaging</span><strong>€2.99</strong></div><div class="cart-line diagnosable" data-pattern="E4"><span>Care Donation</span><strong>€1.00</strong></div>`}
+            <div class="form-field" style="margin-top:12px"><strong>Coupon code</strong><span>Enter code</span></div>
+            <div class="fake-ui"><button class="btn primary" data-action="goDelivery">Checkout</button></div>
+          </div>
+          ${renderMarketSummary()}
+        </div>
+      `;
+    }
+
+    function renderDelivery() {
+      const curedVisual = currentProgress().repaired.E7;
+      const curedDefaults = currentProgress().repaired.E5;
+      return `
+        <div class="market-layout">
+          <div>
+            <div class="market-card ${curedVisual ? "" : "diagnosable"}" ${curedVisual ? "" : "data-pattern=\"E7\""}>
+              <h2>Delivery options</h2>
+              <div class="delivery-card" style="border-color:#2f8f5b; box-shadow:0 12px 30px rgba(47,143,91,.18)">
+                <span class="market-pill warm">Recommended</span>
+                <h3>Express Delivery</h3>
+                <p>Arrives tomorrow · €7.99</p>
+                <button class="btn primary">Choose Express</button>
+              </div>
+              <p style="margin-top:10px"><button class="link-button">standard delivery, arrives in 5 days · €3.99</button></p>
+              <div class="delivery-card"><h3>Premium Delivery</h3><p>Arrives tonight · €12.99</p><button class="btn">Choose Premium</button></div>
+            </div>
+            <div class="market-card ${curedDefaults ? "" : "diagnosable"}" style="margin-top:14px" ${curedDefaults ? "" : "data-pattern=\"E5\""}>
+              <h2>Add-ons</h2>
+              ${marketAddon("shippingInsurance", "Shipping insurance", "Protect lost or damaged parcels", "€4.99")}
+              ${marketAddon("smsTracking", "SMS tracking", "Text updates for this order", "€1.99")}
+              ${marketAddon("marketing", "Marketing emails", "Personalized offers and reminders", "checked")}
+            </div>
+            <div class="fake-ui"><button class="btn primary" data-action="goPayment">Continue to payment</button></div>
+          </div>
+          ${renderMarketSummary()}
+        </div>
+      `;
+    }
+
+    function marketAddon(key, title, text, price) {
+      const checked = state.ecommerce.addOns[key] ? "checked" : "";
+      return `<label class="cart-line"><span><input type="checkbox" ${checked} data-action="toggleMarketAddon:${key}"> <strong>${title}</strong><br><span class="muted">${text}</span></span><strong>${price}</strong></label>`;
+    }
+
+    function renderMarketPayment() {
+      state.ecommerce.paymentFeesVisible = true;
+      const curedFees = currentProgress().repaired.E6;
+      return `
+        <div class="market-layout">
+          <div>
+            <div class="market-card">
+              <h2>Payment method</h2>
+              <div class="form-grid">
+                <div class="form-field"><strong>Card number</strong><span>•••• •••• •••• 4242</span></div>
+                <div class="form-field"><strong>Billing address</strong><span>12 Market Lane</span></div>
+              </div>
+            </div>
+            <div class="fake-ui" style="margin-top:12px"><button class="btn primary" data-action="completeMarketOrder">Pay now</button></div>
+          </div>
+          ${renderMarketSummary(curedFees ? "" : "E6")}
+        </div>
+      `;
+    }
+
+    function renderOrderComplete() {
+      return `
+        <div class="market-card">
+          <h2>Order confirmed</h2>
+          <p>Order number EM-2048-77. Estimated delivery: Friday.</p>
+          <div class="report-grid">
+            <div class="report-item"><h3>Total paid</h3><p>€${marketTotal().toFixed(2)}</p></div>
+            <div class="report-item"><h3>Shipping</h3><p>Express Delivery</p></div>
+          </div>
+          <div class="fake-ui"><button class="btn primary" data-action="finishMarketReport">View Diagnosis Report</button></div>
+        </div>
+      `;
+    }
+
+    function renderMarketSummary(patternId = "") {
+      const rows = marketRows();
+      return `
+        <aside class="market-summary ${patternId ? "diagnosable" : ""}" ${patternId ? `data-pattern="${patternId}"` : ""}>
+          <h3>Order summary</h3>
+          ${rows.map(row => `<div class="market-summary-row ${row.total ? "total" : ""} ${row.pattern ? "diagnosable" : ""}" ${row.pattern ? `data-pattern="${row.pattern}"` : ""}><span>${row.label}</span><strong>€${row.amount.toFixed(2)}</strong></div>`).join("")}
+        </aside>
+      `;
+    }
+
+    function marketRows() {
+      const rows = [{ label: "CloudSoft 24 rolls", amount: 15.99 }];
+      if (state.pageId === "cart" && !currentProgress().repaired.E4) {
+        rows.push({ label: "Eco Packaging", amount: 2.99, pattern: "E4" });
+        rows.push({ label: "Care Donation", amount: 1.00, pattern: "E4" });
+      }
+      if (["delivery", "payment", "order"].includes(state.pageId)) {
+        rows.push({ label: state.ecommerce.delivery === "express" ? "Express delivery" : "Standard delivery", amount: state.ecommerce.delivery === "express" ? 7.99 : 3.99, pattern: state.pageId === "delivery" ? "E7" : "" });
+        if (state.ecommerce.addOns.shippingInsurance) rows.push({ label: "Shipping insurance", amount: 4.99, pattern: state.pageId === "delivery" ? "E5" : "" });
+        if (state.ecommerce.addOns.smsTracking) rows.push({ label: "SMS tracking", amount: 1.99, pattern: state.pageId === "delivery" ? "E5" : "" });
+      }
+      if (state.ecommerce.paymentFeesVisible || state.pageId === "payment" || state.pageId === "order") {
+        rows.push({ label: "Platform fee", amount: 3.99, pattern: "E6" });
+        rows.push({ label: "Handling fee", amount: 2.49, pattern: "E6" });
+      }
+      rows.push({ label: "Total", amount: rows.reduce((sum, row) => sum + row.amount, 0), total: true });
+      return rows;
+    }
+
+    function marketTotal() {
+      return marketRows().filter(row => !row.total).reduce((sum, row) => sum + row.amount, 0);
+    }
+
+    function handleEcommerceAction(event, action) {
+      event.stopPropagation();
+      if (action === "normalClick") return showToast("No symptom detected here. This element appears clinically normal.");
+      if (action === "viewProduct") return goEcommercePage("detail");
+      if (action === "openCompare") { state.compareDrawer = true; return renderEcommerceGame(); }
+      if (action === "closeCompare") { state.compareDrawer = false; return renderEcommerceGame(); }
+      if (action === "addProduct") {
+        if (!state.couponShown && !currentProgress().repaired.E1) { state.couponModal = true; state.couponShown = true; return renderEcommerceGame(); }
+        state.ecommerce.productAdded = true; return goEcommercePage("cart");
+      }
+      if (action === "closeCoupon") { state.couponModal = false; return renderEcommerceGame(); }
+      if (action === "acceptCoupon") { state.couponModal = false; state.ecommerce.productAdded = true; return goEcommercePage("cart"); }
+      if (action === "goDelivery") return goEcommercePage("delivery");
+      if (action === "goPayment") return goEcommercePage("payment");
+      if (action === "completeMarketOrder") return goEcommercePage("order");
+      if (action === "finishMarketReport") return finishReport();
+      if (action.startsWith("toggleMarketAddon:")) {
+        const key = action.split(":")[1];
+        state.ecommerce.addOns[key] = !state.ecommerce.addOns[key];
+        return renderEcommerceGame();
+      }
+    }
+
+    function goEcommercePage(id) {
+      state.pageId = id;
+      currentProgress().visited[id] = true;
+      state.selectedPatternId = "";
+      state.feedback = "";
+      state.couponModal = false;
+      state.compareDrawer = false;
+      if (id === "detail") state.ecommerceTimer = 900;
+      if (id === "delivery" && !state.ecommerce.deliveryDefaultsApplied && !currentProgress().repaired.E5) {
+        state.ecommerce.addOns.shippingInsurance = true;
+        state.ecommerce.addOns.smsTracking = true;
+        state.ecommerce.addOns.marketing = true;
+        state.ecommerce.deliveryDefaultsApplied = true;
+      }
+      renderEcommerceGame();
+    }
+
+    function startEcommerceTimer() {
+      if (state.ecommerceTimerHandle) return;
+      state.ecommerceTimerHandle = setInterval(() => {
+        if (state.pageId !== "detail") return;
+        state.ecommerceTimer = Math.max(0, state.ecommerceTimer - 1);
+        renderEcommerceTimerText();
+      }, 1000);
+    }
+
+    function stopEcommerceTimer() {
+      if (state.ecommerceTimerHandle) clearInterval(state.ecommerceTimerHandle);
+      state.ecommerceTimerHandle = null;
+    }
+
+    function renderEcommerceTimerText() {
+      const node = el("marketTimerText");
+      if (node) node.textContent = formatTimer(state.ecommerceTimer);
+    }
+
     let toastTimer = null;
     function showToast(message) {
       const toast = el("toast");
@@ -1972,7 +2611,7 @@
     }
 
     function openPattern(id) {
-      if (currentScenario()?.id === "flight") {
+      if (["flight", "ecommerce"].includes(currentScenario()?.id)) {
         openFlightDiagnosis(id);
         return;
       }
@@ -1991,6 +2630,7 @@
 
     function openFlightDiagnosis(id) {
       if (id === "DP06") state.insuranceModal = false;
+      if (id === "E1") state.couponModal = false;
       state.selectedPatternId = id;
       state.selectedType = "";
       state.selectedHarm = "";
@@ -2019,7 +2659,7 @@
         el("closeDiagnosisSuccess").addEventListener("click", () => {
           el("diagnosisModal").classList.remove("active");
           state.selectedPatternId = "";
-          renderFlightGame();
+          renderGame();
         });
         return;
       }
@@ -2081,6 +2721,7 @@
           progress.repaired[pattern.id] = true;
           progress.score += 10 + (progress.attempts[pattern.id] === 1 ? 3 : 0);
           applyFlightCure(pattern.id);
+          if (scenario.id === "ecommerce") applyEcommerceCure(pattern.id);
         }
         renderFlightDiagnosisModal("success");
       } else {
@@ -2211,6 +2852,21 @@
       }
     }
 
+    function applyEcommerceCure(id) {
+      if (id === "E1") state.couponModal = false;
+      if (id === "E4") {
+        // Automatic cart extras are removed after cure.
+      }
+      if (id === "E5") {
+        Object.keys(state.ecommerce.addOns).forEach(key => {
+          state.ecommerce.addOns[key] = false;
+        });
+        state.ecommerce.deliveryDefaultsApplied = true;
+      }
+      if (id === "E6") state.ecommerce.paymentFeesVisible = true;
+      if (id === "E7") state.ecommerce.delivery = "standard";
+    }
+
     function researchBlock(pattern) {
       const notes = pattern.researchRefIds.map(id => researchNotes.find(note => note.id === id)).filter(Boolean);
       return notes.map(note => `
@@ -2295,7 +2951,14 @@
       el("reportCases").addEventListener("click", () => { renderCases(); showScreen("caseScreen"); });
       el("nextCase").addEventListener("click", () => {
         const index = scenarios.findIndex(s => s.id === scenario.id);
-        startScenario(scenarios[(index + 1) % scenarios.length].id);
+        const next = scenarios.slice(index + 1).find(s => s.status === "available");
+        if (next) {
+          startScenario(next.id);
+        } else {
+          renderCases();
+          showScreen("caseScreen");
+          showToast("Next case is still locked.");
+        }
       });
       showScreen("reportScreen");
     }
